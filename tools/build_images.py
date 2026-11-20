@@ -345,6 +345,9 @@ EDITS = {
     },
     'nativeVITA/_fpk/ui/menu.fpk': {
         **{i: labels(((0, 0, 256, 52), t, PLATE)) for i, t in PLATES.items()},
+        # ranking record labels: 72x20 rows from (160,176) (SSAD menu/0299 TxMaxG)
+        306: labels(*grid(160, 176, 72, 20, [['Total KOs'], ['Total Combos'], ['Total Sorties'], ['Level']],
+                          replace(HUD, size=14, fill=((255, 255, 255), (170, 170, 175)), outline=(20, 20, 25)))),
         352: labels(*grid(410, 379, 132, 20, [[t, None] for t in MAIN_ITEMS], MAIN),
                     *grid(542, 379, 132, 20, [[t] for t in MAIN_ITEMS], MAIN_SEL),
                     ((408, 536, 560, 568), 'Main Menu', MAIN_TITLE)),

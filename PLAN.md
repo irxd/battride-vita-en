@@ -72,10 +72,18 @@ patches, browser web patcher, optional English home-screen name.
 - [ ] Review pass on device
 
 ### Phase 5: Images and movies
-- [ ] List UI textures (GXT in `ui/` etc.) with Japanese text. GXT decode/encode tool
-- [ ] Redraw the important ones (boot notice, YES/NO, main menu, mission banners, title)
+UI textures are GXT (all swizzled DXT1/DXT5) inside `ui/*.fpk`; sprite rectangles come from the SpriteStudio
+layouts (SSAD files, PART > AREA). `tools/gxt.py` decodes/encodes, `tools/build_images.py` clears each sprite
+rectangle and draws the English with Windows fonts (Impact, Arial, Times), re-encoding only touched blocks.
+- [x] Boot notice (title 0004), Yes/No (common 0016)
+- [x] Main menu items and header (menu 0352), screen headers (common 0083), options labels (menu 0369)
+- [x] Pause/customize menu labels, Start/Quit Mission, shop tabs (texture/menu 0005)
+- [x] 54 mission objective cut-ins (action 0064-0117), battle HUD labels (action 0153/0154/0155/0157)
+- [x] 61 rider name plates (menu 0091-0151), ranking record labels (menu 0306)
+- [ ] Tiny labels: menu 0305 (record screen, ~6 px text), menu 0248/0308, result 0192/0306/0307/0308,
+      action 0201/0331, common 0014, portrait name tags (menu 0158-0201)
+- [ ] Counter suffixes 枚/体 (action 0155), stylised finisher kanji in result effects (likely keep)
 - [ ] Movies: story intro narration and chapter movies, check for burned-in text
-
 ### Phase 6: DLC
 - [x] DLC = three 0-byte unlock flags. The characters ship in update 1.02. No DLC text.
 

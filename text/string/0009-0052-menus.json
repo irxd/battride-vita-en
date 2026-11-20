@@ -1,7 +1,6 @@
 {
   "9dec44a3aa": "Figure",
   "eb6aaba1a1": "sec",
-
   "cb3eb0de06": "■Original Work",
   "5f4e50c70d": "　Shotaro Ishinomori",
   "64eeef8152": "　(Ishimori Productions)",
@@ -92,7 +91,6 @@
   "1b664618df": "■Production",
   "c7a1692e5f": "　BANDAI NAMCO Games Inc.",
   "c27b137c31": "Produced by BANDAI NAMCO Games Inc.",
-
   "98ddcb5f08": "Options Menu",
   "77e0b2ae8e": "Game Settings",
   "ca21bda349": "Save/Load",
@@ -134,7 +132,6 @@
   "ad467ff1f0": "Upload",
   "bc3a85876c": "Download",
   "5fea77b3f6": "Load/save your data and change save settings.",
-
   "79d3d2ecc4": "Figure Viewer",
   "73b87d6b76": "Shop",
   "70e9d6cdad": "Sound Gallery",
@@ -162,7 +159,7 @@
   "c13f3133af": "Zoom",
   "e49c3eae99": "Reset Camera",
   "e777a902c6": "A difficulty for action game beginners.\nEnemies attack less often, so you can breeze through.\n*EXP and shop points x1.0.",
-  "1a1f110a33": "Recommended for players who have played\naction games. Enjoy the game casually.\n*EXP and shop points x1.2.",
+  "1a1f110a33": "Recommended for players who have played action games. Enjoy the game casually.\n*EXP and shop points x1.2.",
   "3bd770ccfd": "For players who are getting used to the game.\nEnemies hit harder and are tougher.\n*EXP and shop points x1.5.",
   "c7251252ce": "For players who are fully used to the game.\nEnemies attack even more often.\n*EXP and shop points x2.0.",
   "bfb6f1379c": "For players very confident in their skills.\nEnemies are brutally strong.\n*EXP and shop points x3.0.",
@@ -185,7 +182,6 @@
   "3ba94ed15c": "By Attack",
   "ec2d6a072d": "By Defense",
   "f122613686": "By SP",
-
   "819a69d2cd": "Play through a rich story woven by the Riders.",
   "5c3fdd0aaf": "Play missions with special conditions and co-op missions.",
   "291f1fea27": "Choose any Rider and play any mission.",
@@ -221,7 +217,6 @@
   "51616e2e0a": "Set the BGM volume.",
   "cbe48c03ae": "Set the SE volume.",
   "1ed2bcae71": "Set the voice volume.",
-
   "8ccdf43f8a": "Event Notice Test 0",
   "b86b2cba07": "Event Notice Test 1",
   "00003c9c01": "Event Notice Test 2",
@@ -232,7 +227,6 @@
   "6e691e7d37": "Event Notice Test 7",
   "3df635169b": "Event Notice Test 8",
   "872ef5976f": "Event Notice Test 9",
-
   "b284c38459": "Skill Effects",
   "d0f9bcbc9e": "Skill Slot 1",
   "7687921421": "Skill Slot 2",

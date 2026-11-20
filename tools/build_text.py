@@ -67,12 +67,13 @@ def wrap(text, limit, fnt):
     """Greedy word wrap of each paragraph to `limit` pixels."""
     out = []
     for para in text.split('\n'):
+        indent = para[:len(para) - len(para.lstrip('　'))]   # continuation lines keep a full-width indent
         line = ''
         for word in para.split(' '):
             cand = word if not line else line + ' ' + word
             if line and width(fnt, cand) > limit:
                 out.append(line)
-                line = word
+                line = indent + word
             else:
                 line = cand
         out.append(line)
@@ -101,8 +102,8 @@ class Builder:
             self.issues.setdefault(jp, (where, 'GLYPH', f'not in font: {miss}'))
         jp_lines = jp.split('\n')
         limit = max([width(self.fnt, l) for l in jp_lines] + [box if len(jp_lines) > 1 else 0])
-        if '\n' not in en and len(jp_lines) > 1:
-            en = wrap(en, limit, self.fnt)
+        if len(jp_lines) > 1:
+            en = wrap(en, limit, self.fnt)   # keeps the translation's own line breaks, adds more where too wide
         en_lines = en.split('\n')
         widest = max(width(self.fnt, l) for l in en_lines)
         if len(jp_lines) == 1 and len(en_lines) == 1 and widest > limit * 1.05 and widest - limit > 8:

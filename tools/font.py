@@ -4,12 +4,15 @@
     0x1c glyph records, 48 bytes each:
          u32 code (Unicode), u32 page, f32 u0, v0, u1, v1, f32 ?, width, height, x offset, y offset, advance
 
-The font already has proportional ASCII. For English only the space is narrowed.
+The font already has proportional ASCII. For English, the ASCII glyphs are drawn at ASCII_SCALE (quad size, offsets
+and advance scaled; the texture stays the same) so more English fits in the game's text boxes, and the space is
+narrowed. Tested in Vita3K: 0.85 stays legible.
 """
 import struct
 
 REC = 0x1c
-SPACE_ADVANCE = 5.0       # original 10.0: twice as wide as an English space should be next to 9 px letters
+ASCII_SCALE = 0.85
+SPACE_ADVANCE = 4.5       # original 10.0 (before scaling): far too wide next to ~8 px letters
 
 
 class Font:
@@ -37,5 +40,8 @@ class Font:
 
 def english(data):
     f = Font(data)
+    for c in range(0x21, 0x7f):
+        o = REC + f.index[c] * 48 + 28            # width, height, x offset, y offset, advance
+        struct.pack_into('<5f', f.data, o, *(v * ASCII_SCALE for v in struct.unpack_from('<5f', f.data, o)))
     f.set_advance(' ', SPACE_ADVANCE)
     return f

@@ -19,6 +19,7 @@ import gxt
 from build_text import ROOT, game_file
 
 FONTS = Path('C:/Windows/Fonts')
+MIN_SQUEEZE = 0.7      # narrowest horizontal squeeze before text is scaled down instead
 
 
 # ---------------------------------------------------------------- text rendering
@@ -29,6 +30,8 @@ class Style:
     fill: tuple = (255, 255, 255)          # colour, or (top, bottom) gradient
     outline: tuple = None                  # colour
     ow: int = 0                            # outline width
+    outline2: tuple = None                 # second (outer) outline colour
+    ow2: int = 0
     glow: tuple = None                     # colour
     gr: float = 0                          # glow radius
     glow_alpha: float = 1.0
@@ -38,6 +41,24 @@ class Style:
     indent: int = 2
     bg: tuple = None                       # fill the region with this colour instead of clearing it
     spacing: int = 0                       # extra line spacing for multi-line text
+    smallcaps: float = 0                   # >0: lowercase letters drawn as capitals at this scale
+
+
+def _runs(line, st):
+    """[(text, font)] for one line (small caps split into big/small runs)."""
+    big = ImageFont.truetype(str(FONTS / st.font), st.size)
+    if not st.smallcaps:
+        return [(line, big)]
+    small = ImageFont.truetype(str(FONTS / st.font), round(st.size * st.smallcaps))
+    out = []
+    for ch in line:
+        f = small if ch.islower() else big
+        c = ch.upper()
+        if out and out[-1][1] is f:
+            out[-1] = (out[-1][0] + c, f)
+        else:
+            out.append((c, f))
+    return out
 
 
 def _gradient(size, top, bottom, y0=0.25, y1=0.75):
@@ -52,18 +73,20 @@ def _gradient(size, top, bottom, y0=0.25, y1=0.75):
 
 def render(text, st):
     f = ImageFont.truetype(str(FONTS / st.font), st.size)
-    pad = st.ow + int(st.gr * 2) + 4
-    lines = text.split('\n')
+    pad = max(st.ow, st.ow2) + int(st.gr * 2) + 4
+    lines = [_runs(l, st) for l in text.split('\n')]
     asc, desc = f.getmetrics()
     lh = asc + desc + st.spacing
-    widths = [f.getlength(l) for l in lines]
+    widths = [sum(fo.getlength(t) for t, fo in runs) for runs in lines]
     w = int(max(widths)) + 2 * pad + int(st.size * st.slant) + 2
     h = lh * len(lines) + 2 * pad
     mask = Image.new('L', (w, h))
     d = ImageDraw.Draw(mask)
-    for i, (line, lw) in enumerate(zip(lines, widths)):
+    for i, (runs, lw) in enumerate(zip(lines, widths)):
         x = pad if st.align == 'left' else pad + (max(widths) - lw) / 2
-        d.text((x, pad + i * lh), line, font=f, fill=255)
+        for t, fo in runs:
+            d.text((x, pad + i * lh + asc), t, font=fo, fill=255, anchor='ls')
+            x += fo.getlength(t)
     if st.slant:
         mask = mask.transform(mask.size, Image.AFFINE, (1, st.slant, -st.slant * h / 2, 0, 1, 0), Image.BICUBIC)
     img = Image.new('RGBA', (w, h))
@@ -76,6 +99,8 @@ def render(text, st):
         sh = Image.new('L', (w, h))
         sh.paste(mask, (dx, dy))
         img.paste(col + (255,), (0, 0), sh)
+    if st.outline2 and st.ow2:
+        img.paste(st.outline2 + (255,), (0, 0), mask.filter(ImageFilter.MaxFilter(2 * st.ow2 + 1)))
     if st.outline and st.ow:
         img.paste(st.outline + (255,), (0, 0), mask.filter(ImageFilter.MaxFilter(2 * st.ow + 1)))
     if isinstance(st.fill[0], tuple):
@@ -99,6 +124,10 @@ def place(img, region, text, st, valign=None):
     s = render(text, st)
     maxw, maxh = x1 - x0, y1 - y0
     if s.width > maxw:
+        r = maxw / s.width
+        if r < MIN_SQUEEZE:     # too long: shrink uniformly first, then squeeze
+            k = r / MIN_SQUEEZE
+            s = s.resize((max(1, round(s.width * k)), max(1, round(s.height * k))), Image.LANCZOS)
         s = s.resize((maxw, s.height), Image.LANCZOS)
     if s.height > maxh:
         s = s.crop((0, (s.height - maxh) // 2, s.width, (s.height - maxh) // 2 + maxh))
@@ -243,6 +272,21 @@ def grid(x0, y0, w, h, names, st):
     return out
 
 
+# rider name plates (ui/menu.fpk 0091-0151, 256x128): name sprite (0,0)-(256,52) (SSAD menu/0071 'name')
+PLATE = Style(font='timesbi.ttf', size=40, fill=((70, 70, 70), (20, 20, 20)), outline=(235, 235, 225), ow=2,
+              outline2=(30, 30, 30), ow2=3, smallcaps=0.78)
+PLATES = {
+    91: 'Accel', 92: 'Agito', 93: 'Amazon', 94: 'Autovajin', 95: 'Birth', 96: 'Blade', 98: 'Baron', 100: 'Beast',
+    101: 'Chaser', 102: 'Chaser', 103: 'Decade', 104: 'Decade Violent Emotion', 105: 'Diend', 106: 'Den-O',
+    107: 'Dark Kiva', 108: 'Drive', 109: 'Eternal', 110: 'Faiz', 111: 'FangJoker', 112: 'Fourze', 114: 'Gaim',
+    115: 'Gatack', 116: 'Toucon Boost', 117: 'Ghost', 118: 'Garren', 119: 'Hibiki', 120: 'Ibuki',
+    121: 'IXA (Nago)', 122: 'IXA', 123: 'Kabuto', 124: 'Kuuga (Yusuke)', 125: 'Kiva', 126: 'Kaixa', 127: 'Knight',
+    128: 'No. 1', 129: 'No. 2', 132: 'Kuuga', 134: 'Mach', 135: 'Meteor', 136: 'New Den-O', 137: 'OOO',
+    138: 'Ryugen', 139: 'Riderman', 140: 'Ryuki', 141: 'Skull', 142: 'Skyrider', 143: 'Specter', 144: 'Super-1',
+    145: 'Stronger', 146: 'Takeshi Hongo (Disguised)', 148: 'Wizard', 149: 'Joker', 150: 'Zeronos',
+    151: 'Zangetsu Shin',
+}
+
 PAUSE = [['Bonus Settings', 'Shop'], ['Custom Soundtrack', 'View Cards'], ['Skills', 'Move List'],
          ['Forms', 'View Skills'], ['Cards', 'Game Settings'], ['Change Figure', 'Buy Voices'], ['Buy BGM', None]]
 
@@ -262,6 +306,7 @@ EDITS = {
                    ((0, 308, 144, 334), 'Figure Viewer', HEADER)),
     },
     'nativeVITA/_fpk/ui/menu.fpk': {
+        **{i: labels(((0, 0, 256, 52), t, PLATE)) for i, t in PLATES.items()},
         # options menu labels (measured glyph boxes; icons sit right of the first two)
         369: labels(((0, 0, 100, 22), 'Difficulty', OPTION), ((0, 22, 100, 40), 'Save/Load', OPTION),
                     ((0, 42, 145, 60), 'Custom Soundtrack', OPTION), ((146, 42, 220, 60), 'Options', OPTION),

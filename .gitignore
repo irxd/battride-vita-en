@@ -1,0 +1,37 @@
+# Allow-list: ignore everything, then re-include only our own source files.
+# Game data (Vita dumps, decrypted files, built game files) must never be committed.
+*
+!*/
+
+!/.gitignore
+!/.gitattributes
+!/README.md
+!/CLAUDE.md
+!/LICENSE
+!/docs/**
+!/tools/*.py
+!/tools/re/*.py
+!/scripts/*.ps1
+!/scripts/*.sh
+!/scripts/*.py
+!/text/**/*.json
+
+# Never track these, even inside allowed folders
+__pycache__/
+*.pyc
+*.iso
+*.bin
+*.BIN
+*.zip
+*.rar
+*.7z
+*.key
+*.dkey
+*.pkg
+*.vpk
+*.fpk
+*.elf
+/dump/
+/decrypted/
+/build/
+/release/

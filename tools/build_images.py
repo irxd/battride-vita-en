@@ -317,6 +317,14 @@ HUD_EDITS = {
     157: labels(((126, 35, 252, 56), 'Shop Points Earned', HUD)),
 }
 
+# main menu (ui/menu.fpk 0352): two columns of items (plain / highlighted), header 'Title' (408,536)-(560,568)
+MAIN = Style(font='arialbd.ttf', size=16, fill=(255, 255, 255), shadow=(2, 2, (120, 0, 10)), outline=(60, 0, 0),
+             ow=1)
+MAIN_SEL = Style(font='arialbd.ttf', size=16, fill=(255, 255, 255), glow=(255, 255, 255), gr=1.5, glow_alpha=0.45)
+MAIN_TITLE = Style(font='arialbi.ttf', size=24, fill=(255, 255, 255), shadow=(2, 2, (150, 0, 0)), outline=(90, 0, 0),
+                   ow=1, glow=(230, 0, 0), gr=2.5, glow_alpha=0.6)
+MAIN_ITEMS = ['Story Mode', 'Time Survival', 'Free Mission', 'Custom Soundtrack', 'Contents', 'Options']
+
 PAUSE = [['Bonus Settings', 'Shop'], ['Custom Soundtrack', 'View Cards'], ['Skills', 'Move List'],
          ['Forms', 'View Skills'], ['Cards', 'Game Settings'], ['Change Figure', 'Buy Voices'], ['Buy BGM', None]]
 
@@ -337,6 +345,9 @@ EDITS = {
     },
     'nativeVITA/_fpk/ui/menu.fpk': {
         **{i: labels(((0, 0, 256, 52), t, PLATE)) for i, t in PLATES.items()},
+        352: labels(*grid(410, 379, 132, 20, [[t, None] for t in MAIN_ITEMS], MAIN),
+                    *grid(542, 379, 132, 20, [[t] for t in MAIN_ITEMS], MAIN_SEL),
+                    ((408, 536, 560, 568), 'Main Menu', MAIN_TITLE)),
         # options menu labels (measured glyph boxes; icons sit right of the first two)
         369: labels(((0, 0, 100, 22), 'Difficulty', OPTION), ((0, 22, 100, 40), 'Save/Load', OPTION),
                     ((0, 42, 145, 60), 'Custom Soundtrack', OPTION), ((146, 42, 220, 60), 'Options', OPTION),

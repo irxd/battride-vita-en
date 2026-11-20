@@ -83,7 +83,7 @@ rectangle and draws the English with Windows fonts (Impact, Arial, Times), re-en
 - [x] Portrait name tags (menu 0158-0201), rider name list (menu 0248), HUD counter suffixes removed
 - [ ] Left as is: 6-7 px label atlases no SSAD layout references (menu 0305/0308, result 0306/0307/0308,
       action 0201, common 0014), 秒 in result 0192, stylised finisher kanji in result effects (artwork)
-- [x] Movies (`tools/build_movies.py`, cues in `text/movies/*.json`, no Japanese stored): 31 of 61 movies have
+- [x] Movies (`tools/build_movies.py`, cues in `text/movies/*.json`, no Japanese stored): 29 of 61 movies have
       burned-in subtitles (none in the string tables). 3 story chapter movies (etc/CHP_*, 'Speaker「line」' on a
       black bar) and 26 mission movies (small centred text) are re-rendered: each English cue covers the Japanese
       (black bar / dark rounded box) via ffmpeg overlay, re-encoded with h264_nvenc (Main@3.1, B-frames, GOP 30,

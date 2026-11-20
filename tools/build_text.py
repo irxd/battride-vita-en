@@ -85,7 +85,7 @@ class Builder:
         self.tr, self.fnt = tr, fnt
         self.used, self.issues, self.done, self.total = set(), {}, set(), set()
 
-    def english(self, jp, where, box=0):
+    def english(self, jp, where, box=0, box_lines=0):
         if not JP.search(jp):
             return jp
         self.total.add(jp)
@@ -108,7 +108,7 @@ class Builder:
         widest = max(width(self.fnt, l) for l in en_lines)
         if len(jp_lines) == 1 and len(en_lines) == 1 and widest > limit * 1.05 and widest - limit > 8:
             self.issues.setdefault(jp, (where, 'WIDE', f'{widest:.0f}px vs {limit:.0f}px: {en}'))
-        elif len(en_lines) > len(jp_lines):
+        elif len(en_lines) > max(len(jp_lines), box_lines if len(jp_lines) > 1 else 0):
             self.issues.setdefault(jp, (where, 'LINES', f'{len(en_lines)} lines vs {len(jp_lines)}: {en!r}'))
         return en
 
@@ -123,7 +123,9 @@ class Builder:
             # a text box is as wide as the widest line of any multi-line string in the same table
             multi = [s for s in strings if '\n' in s.strip('\n')]
             box = max([width(self.fnt, l) for s in multi for l in s.split('\n')] or [0])
-            new = [self.english(s, f'{rel}#{i}.{j}', box) for j, s in enumerate(strings)]
+            # large tables of one kind of text (e.g. move descriptions) share one box: its height is the most lines
+            box_lines = max(len(s.rstrip('\n').split('\n')) for s in multi) if len(multi) >= 20 else 0
+            new = [self.english(s, f'{rel}#{i}.{j}', box, box_lines) for j, s in enumerate(strings)]
             if new != strings:
                 f.set_content(i, sta.write(new, *[int.from_bytes(data[4:8], 'little')]))
                 changed = True

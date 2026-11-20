@@ -337,6 +337,18 @@ TAGS = {
     201: 'Zangetsu Shin',
 }
 
+# rider name list (ui/menu.fpk 0248): 6 columns of 84x24 cells from (0,708) (SSAD menu/0238 ridertext_01)
+LIST = Style(font='arialbd.ttf', size=12, fill=(255, 255, 255))
+LIST2 = replace(LIST, size=10, spacing=-2)
+RIDER_LIST = [['Kuuga', 'Agito', 'Ryuki', None, 'Stronger', 'Super-1'],
+              ['Faiz', 'Blade', 'Hibiki', None, 'Ghost', None],
+              ['Kabuto', 'Den-O', 'Kiva', 'No. 2', 'Amazon', 'Skyrider'],
+              ['Decade', 'W', 'Fang\nJoker', 'Specter', 'Toucon\nBoost', 'Chaser'],
+              ['OOO', 'Fourze', 'Wizard'], ['Accel', 'Birth', 'Meteor'], ['Beast', 'Gaim', 'Baron'],
+              ['Decade Violent\nEmotion', 'Zangetsu Shin', None], ['Knight', 'Kaixa', 'Garren'],
+              ['Ibuki', 'Gatack', 'Zeronos'], ['IXA', 'Diend', 'Joker'], ['Eternal', 'Drive', 'Mach'],
+              ['Kuuga\n(Yusuke)', 'No. 1', None]]
+
 PAUSE = [['Bonus Settings', 'Shop'], ['Custom Soundtrack', 'View Cards'], ['Skills', 'Move List'],
          ['Forms', 'View Skills'], ['Cards', 'Game Settings'], ['Change Figure', 'Buy Voices'], ['Buy BGM', None]]
 
@@ -361,6 +373,7 @@ EDITS = {
         306: labels(*grid(160, 176, 72, 20, [['Total KOs'], ['Total Combos'], ['Total Sorties'], ['Level']],
                           replace(HUD, size=14, fill=((255, 255, 255), (170, 170, 175)), outline=(20, 20, 25)))),
         **{i: labels(((0, 416, 148, 432), t, TAG)) for i, t in TAGS.items()},
+        248: labels(*[(r, t, LIST2 if '\n' in t else LIST) for r, t, _ in grid(0, 708, 84, 24, RIDER_LIST, LIST)]),
         352: labels(*grid(410, 379, 132, 20, [[t, None] for t in MAIN_ITEMS], MAIN),
                     *grid(542, 379, 132, 20, [[t] for t in MAIN_ITEMS], MAIN_SEL),
                     ((408, 536, 560, 568), 'Main Menu', MAIN_TITLE)),

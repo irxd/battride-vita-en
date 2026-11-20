@@ -21,8 +21,8 @@ import fpk, sta, font
 ROOT = Path(__file__).resolve().parent.parent
 GAME = [ROOT / 'decrypted/patch/PCSG00675', ROOT / 'decrypted/app/PCSG00675']   # 1.02 first
 FONT = 'nativeVITA/font/FOT-NewRodinPro-DB.fnt'
-JP = re.compile('[぀-ヿ㐀-鿿！-～]')
-KEEP = re.compile(r'[-]|%[-+ #0]*\d*(?:\.\d+)?[a-zA-Z]')   # button icons and printf codes
+JP = re.compile(r'[\u3040-\u30ff\u3400-\u9fff\uff01-\uff5e]')
+KEEP = re.compile(r'[\ue000-\ue00f]|%[-+ #0]*\d*(?:\.\d+)?[a-zA-Z]|</?COLOR[^>]*>')   # buttons, printf, colors
 
 
 def key(text):
@@ -56,6 +56,13 @@ def load_translations():
     return tr
 
 
+TAG = re.compile(r'</?COLOR[^>]*>')
+
+
+def width(fnt, line):
+    return fnt.width(TAG.sub('', line))
+
+
 def wrap(text, limit, fnt):
     """Greedy word wrap of each paragraph to `limit` pixels."""
     out = []
@@ -63,7 +70,7 @@ def wrap(text, limit, fnt):
         line = ''
         for word in para.split(' '):
             cand = word if not line else line + ' ' + word
-            if line and fnt.width(cand) > limit:
+            if line and width(fnt, cand) > limit:
                 out.append(line)
                 line = word
             else:
@@ -86,16 +93,18 @@ class Builder:
             return jp
         self.used.add(key(jp))
         self.done.add(jp)
+        if '%' not in jp:
+            en = en.replace('%', '％')   # the string may go through printf; the Japanese uses full-width too
         if sorted(KEEP.findall(en)) != sorted(KEEP.findall(jp)):
             self.issues.setdefault(jp, (where, 'CODES', f'icons/format codes differ: {KEEP.findall(jp)} -> {KEEP.findall(en)}'))
         if miss := [c for c in self.fnt.missing(en) if c not in jp]:
             self.issues.setdefault(jp, (where, 'GLYPH', f'not in font: {miss}'))
         jp_lines = jp.split('\n')
-        limit = max(self.fnt.width(l) for l in jp_lines)
+        limit = max(width(self.fnt, l) for l in jp_lines)
         if '\n' not in en and len(jp_lines) > 1:
             en = wrap(en, limit, self.fnt)
         en_lines = en.split('\n')
-        widest = max(self.fnt.width(l) for l in en_lines)
+        widest = max(width(self.fnt, l) for l in en_lines)
         if len(jp_lines) == 1 and len(en_lines) == 1 and widest > limit * 1.05 and widest - limit > 8:
             self.issues.setdefault(jp, (where, 'WIDE', f'{widest:.0f}px vs {limit:.0f}px: {en}'))
         elif len(en_lines) > len(jp_lines):

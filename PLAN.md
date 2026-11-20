@@ -68,7 +68,7 @@ patches, browser web patcher, optional English home-screen name.
 - [x] Character descriptions, figure descriptions, unlock messages, battle cries, story intro (table 27)
 - [x] Mission dialogue, banners, story, battle lines and navigator commentary: tables 55-938
 - [ ] Staff names in the credits (table 10) are still Japanese (readings of real names not guessed)
-- [ ] Glossary file (romanized terms, no Japanese)
+- [x] Glossary: naming decisions below and the Climax Fighters section (official spellings)
 - [ ] Review pass on device
 
 ### Phase 5: Images and movies
@@ -80,17 +80,18 @@ rectangle and draws the English with Windows fonts (Impact, Arial, Times), re-en
 - [x] Pause/customize menu labels, Start/Quit Mission, shop tabs (texture/menu 0005)
 - [x] 54 mission objective cut-ins (action 0064-0117), battle HUD labels (action 0153/0154/0155/0157)
 - [x] 61 rider name plates (menu 0091-0151), ranking record labels (menu 0306)
-- [ ] Tiny labels: menu 0305 (record screen, ~6 px text), menu 0248/0308, result 0192/0306/0307/0308,
-      action 0201/0331, common 0014, portrait name tags (menu 0158-0201)
-- [ ] Counter suffixes 枚/体 (action 0155), stylised finisher kanji in result effects (likely keep)
+- [x] Portrait name tags (menu 0158-0201), rider name list (menu 0248), HUD counter suffixes removed
+- [ ] Left as is: 6-7 px label atlases no SSAD layout references (menu 0305/0308, result 0306/0307/0308,
+      action 0201, common 0014), 秒 in result 0192, stylised finisher kanji in result effects (artwork)
 - [ ] Movies: story intro narration and chapter movies, check for burned-in text
 ### Phase 6: DLC
 - [x] DLC = three 0-byte unlock flags. The characters ship in update 1.02. No DLC text.
 
 ### Phase 7: Release
-- [ ] `scripts/make_release.py`: build, xdelta, round-trip check, zip
-- [ ] Web patcher (`docs/`), README with install steps, screenshots
-- [ ] Optional English game name (`rename_title.py`)
+- [x] `scripts/make_release.py`: build, xdelta, round-trip check, zip (`python -P scripts/make_release.py <ver>`)
+- [x] Web patcher (`docs/`), README with install steps; `scripts/apply_patches.py` pure-Python patcher
+- [x] Optional English game name (`tools/rename_title.py`)
+- [ ] Screenshots, browser test of the web patcher, hardware test of the install steps
 
 ## Climax Fighters reference (official English names)
 

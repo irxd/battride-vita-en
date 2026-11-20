@@ -1,0 +1,13 @@
+{
+ "style": "msn",
+ "cues": [
+  {"start": 1.3, "end": 7.75, "box": [110, 186, 610, 229],
+   "en": "There are people who simply live, earnestly seeking happiness."},
+  {"start": 7.8, "end": 14.0, "box": [110, 186, 610, 229],
+   "en": "There are people who simply live, earnestly seeking happiness.\nBut in this world, there is an evil that cruelly tramples that happiness."},
+  {"start": 14.2, "end": 19.95, "box": [110, 186, 610, 229],
+   "en": "For many long years, we have fought against that evil."},
+  {"start": 20.0, "end": 24.95, "box": [110, 186, 610, 229],
+   "en": "For many long years, we have fought against that evil.\nAnd that battle continues, even now..."}
+ ]
+}

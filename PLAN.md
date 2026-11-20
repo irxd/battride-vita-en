@@ -40,8 +40,8 @@ patches, browser web patcher, optional English home-screen name.
     line breaks were. Spoken lines wrap to it; one-line banners don't.
   - The build reports `LINES` (too many lines, must fix) and `WIDE` (one-line label wider than the Japanese; only a
     problem if it overflows on screen).
-- **Not text** (need images/movies work): the boot notice (ご注意), YES/はい buttons, main menu items, mission kill
-  counter banner (37体倒せ!!), story intro narration (probably in a movie or texture).
+- **Not text** (done as images/movies, Phase 5): the boot notice (ご注意), YES/はい buttons, main menu items, mission
+  kill counter banner (37体倒せ!!), story intro narration (movie msn/STR_000_000, centred text on black).
 - Vita3K reads only `ux0/app` (merge the update in) and needs the NoNpDrm license in `ux0/license` for the
   encrypted `sce_module` files: `scripts/vita3k_install.py`. `scripts/vita3k_drive.ps1` drives the game with key
   presses and screenshots (Circle = C confirms in game, Cross = X confirms system dialogs). The 3D stages don't render
@@ -90,8 +90,8 @@ rectangle and draws the English with Windows fonts (Impact, Arial, Times), re-en
       ~1 Mbps, moov first, audio copied; h264_mf/amf/qsv fail in the bundled ffmpeg). Opening/Ending have no
       subtitles. Release impact: the re-encoded movies are ~129 MB, so their xdelta patches are about that size.
 - [ ] Movies: in-game playback of a re-encoded movie not yet seen (Vita3K can't get past the 3D stages)
-- [ ] Intro narration before Story Mode chapter 1 (white text on black, advanced with ○) is still Japanese;
-      it is not in a movie or the string tables
+- [x] Intro narration before Story Mode chapter 1 = movie msn/STR_000_000 (centred lines on black; the subtitle
+      scan only looked at the bottom band): 4 cues
 ### Phase 6: DLC
 - [x] DLC = three 0-byte unlock flags. The characters ship in update 1.02. No DLC text.
 

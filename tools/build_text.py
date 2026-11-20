@@ -87,6 +87,15 @@ class Builder:
     def __init__(self, tr, fnt):
         self.tr, self.fnt = tr, fnt
         self.used, self.issues, self.done, self.total = set(), {}, set(), set()
+        self.brief = None     # (width, lines) of the mission briefing box, set by build()
+
+    def measure_briefings(self, string_fpk):
+        """Mission briefings: strings of 3+ lines in the mission tables of string.fpk."""
+        f = fpk.Fpk(string_fpk.read_bytes())
+        briefs = [s.rstrip('\n').split('\n') for e in f.entries[FIRST_MISSION_TABLE:] for s in sta.read(e.content())
+                  if JP.search(s) and s.count('\n') >= DIALOG_LINES]
+        if briefs:
+            self.brief = (max(width(self.fnt, l) for b in briefs for l in b), max(len(b) for b in briefs))
 
     def english(self, jp, where, box=0, box_lines=0, dialog=False):
         if not JP.search(jp):
@@ -109,6 +118,9 @@ class Builder:
         if dialog and SPOKEN.search(jp) and len(jp_lines) <= DIALOG_LINES:
             # mission dialogue box (verified in Vita3K): 2 lines of up to ~340 px, whatever the Japanese used
             limit, max_lines = max(limit, DIALOG_WIDTH), DIALOG_LINES
+        elif dialog and len(jp_lines) > DIALOG_LINES and self.brief:
+            # mission briefings share one box: as wide and tall as the largest Japanese briefing
+            limit, max_lines = max(limit, self.brief[0]), max(max_lines, self.brief[1])
         if len(jp_lines) > 1 or max_lines > 1:
             en = wrap(en, limit, self.fnt)   # keeps the translation's own line breaks, adds more where too wide
         en_lines = en.split('\n')
@@ -145,6 +157,8 @@ def build(out):
     tr = load_translations()
     fnt = font.english(game_file(FONT).read_bytes())
     b = Builder(tr, fnt)
+    b.measure_briefings(game_file('nativeVITA/_fpk/string.fpk'))
+    print(f'mission briefing box: {b.brief[0]:.0f} px, {b.brief[1]} lines')
     n = 0
     for rel, path in archives().items():
         data = b.archive(rel, path)

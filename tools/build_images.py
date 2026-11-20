@@ -325,6 +325,18 @@ MAIN_TITLE = Style(font='arialbi.ttf', size=24, fill=(255, 255, 255), shadow=(2,
                    ow=1, glow=(230, 0, 0), gr=2.5, glow_alpha=0.6)
 MAIN_ITEMS = ['Story Mode', 'Time Survival', 'Free Mission', 'Custom Soundtrack', 'Contents', 'Options']
 
+# rider portraits (ui/menu.fpk, 512x512): small name tag sprite (0,416)-(148,432) (SSAD menu/0153 'name')
+TAG = Style(font='arialbd.ttf', size=13, fill=(255, 255, 255), shadow=(1, 1, (0, 0, 0)))
+TAGS = {
+    158: 'Accel', 159: 'Agito', 160: 'Birth', 161: 'Blade', 163: 'Mr. Belt', 164: 'Baron', 165: 'Beast',
+    166: 'Decade', 167: 'Diend', 168: 'Den-O (Ryotaro)', 169: 'Deneb', 170: 'Drive', 171: 'Faiz', 172: 'Fourze',
+    174: 'Gaim', 175: 'Gatack', 176: 'Ghost', 177: 'Garren', 178: 'Hibiki', 179: 'Ibuki', 180: 'IXA (Nago)',
+    181: 'Kabuto', 182: 'Kintaros', 183: 'Kiva', 184: 'Kaixa', 185: 'Knight', 186: 'No. 1', 187: 'No. 2',
+    188: 'W (Philip)', 189: 'W (Shotaro)', 190: 'Momotaros', 191: 'Meteor', 192: 'OOO', 193: 'Den-O (Ryotaro)',
+    194: 'Ryutaros', 195: 'Ryuki', 196: 'Shadow Moon', 197: 'Urataros', 199: 'Wizard', 200: 'Zeronos',
+    201: 'Zangetsu Shin',
+}
+
 PAUSE = [['Bonus Settings', 'Shop'], ['Custom Soundtrack', 'View Cards'], ['Skills', 'Move List'],
          ['Forms', 'View Skills'], ['Cards', 'Game Settings'], ['Change Figure', 'Buy Voices'], ['Buy BGM', None]]
 
@@ -348,6 +360,7 @@ EDITS = {
         # ranking record labels: 72x20 rows from (160,176) (SSAD menu/0299 TxMaxG)
         306: labels(*grid(160, 176, 72, 20, [['Total KOs'], ['Total Combos'], ['Total Sorties'], ['Level']],
                           replace(HUD, size=14, fill=((255, 255, 255), (170, 170, 175)), outline=(20, 20, 25)))),
+        **{i: labels(((0, 416, 148, 432), t, TAG)) for i, t in TAGS.items()},
         352: labels(*grid(410, 379, 132, 20, [[t, None] for t in MAIN_ITEMS], MAIN),
                     *grid(542, 379, 132, 20, [[t] for t in MAIN_ITEMS], MAIN_SEL),
                     ((408, 536, 560, 568), 'Main Menu', MAIN_TITLE)),

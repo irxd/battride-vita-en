@@ -92,6 +92,18 @@ rectangle and draws the English with Windows fonts (Impact, Arial, Times), re-en
 - [ ] Web patcher (`docs/`), README with install steps, screenshots
 - [ ] Optional English game name (`rename_title.py`)
 
+## Climax Fighters reference (official English names)
+
+`tools/ps4pkg.py` opens the PS4 fake PKG (passcode zeros, checked against ENTRY_KEYS), `tools/psarc.py` reads
+`archive.psarc`, and the text is JSON TextAssets (`keys`/`values`, one table per language) inside
+`Media/level9.resS`. Pairing the Japanese and English tables by key gives ~2,100 official JP→EN pairs
+(`dump/cf/cf_ja_en.json`, local only). 211 of our names already matched; adopted CF spellings:
+W forms with spaces (Cyclone Joker, Fang Joker, Cyclone Joker Extreme), Grand Form / Grand Crash / Grand Impact,
+Shining Clash, Axel Form (Faiz) and Axel moves, Ax Form, Garuru, Sagouzo, Rekkadan, Rekkaken,
+Ongekida: Kaenrenda no Kata / Ikkihasei no Kata, Boisterous (Den-O Sword moves), Bicker Finallusion,
+Fang Streiser, Gush Cross, A-Slasher, Accel Glanzer, Cavaliend.
+Kept ours: Dimension Kick (CF typo), Clock Up, Breakdance, Jimber Lemon Arms, Omega Drive: Boost, UI labels.
+
 ## Decisions
 
 - Translation: done by Claude. The user tests on hardware and reports overflowing text.

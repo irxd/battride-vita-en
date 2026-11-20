@@ -278,7 +278,7 @@ PLATE = Style(font='timesbi.ttf', size=40, fill=((70, 70, 70), (20, 20, 20)), ou
 PLATES = {
     91: 'Accel', 92: 'Agito', 93: 'Amazon', 94: 'Autovajin', 95: 'Birth', 96: 'Blade', 98: 'Baron', 100: 'Beast',
     101: 'Chaser', 102: 'Chaser', 103: 'Decade', 104: 'Decade Violent Emotion', 105: 'Diend', 106: 'Den-O',
-    107: 'Dark Kiva', 108: 'Drive', 109: 'Eternal', 110: 'Faiz', 111: 'FangJoker', 112: 'Fourze', 114: 'Gaim',
+    107: 'Dark Kiva', 108: 'Drive', 109: 'Eternal', 110: 'Faiz', 111: 'Fang Joker', 112: 'Fourze', 114: 'Gaim',
     115: 'Gatack', 116: 'Toucon Boost', 117: 'Ghost', 118: 'Garren', 119: 'Hibiki', 120: 'Ibuki',
     121: 'IXA (Nago)', 122: 'IXA', 123: 'Kabuto', 124: 'Kuuga (Yusuke)', 125: 'Kiva', 126: 'Kaixa', 127: 'Knight',
     128: 'No. 1', 129: 'No. 2', 132: 'Kuuga', 134: 'Mach', 135: 'Meteor', 136: 'New Den-O', 137: 'OOO',

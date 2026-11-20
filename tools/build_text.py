@@ -84,7 +84,7 @@ class Builder:
         self.tr, self.fnt = tr, fnt
         self.used, self.issues, self.done, self.total = set(), {}, set(), set()
 
-    def english(self, jp, where):
+    def english(self, jp, where, box=0):
         if not JP.search(jp):
             return jp
         self.total.add(jp)
@@ -100,7 +100,7 @@ class Builder:
         if miss := [c for c in self.fnt.missing(en) if c not in jp]:
             self.issues.setdefault(jp, (where, 'GLYPH', f'not in font: {miss}'))
         jp_lines = jp.split('\n')
-        limit = max(width(self.fnt, l) for l in jp_lines)
+        limit = max([width(self.fnt, l) for l in jp_lines] + [box if len(jp_lines) > 1 else 0])
         if '\n' not in en and len(jp_lines) > 1:
             en = wrap(en, limit, self.fnt)
         en_lines = en.split('\n')
@@ -119,7 +119,10 @@ class Builder:
             if not sta.is_sta(data):
                 continue
             strings = sta.read(data)
-            new = [self.english(s, f'{rel}#{i}.{j}') for j, s in enumerate(strings)]
+            # a text box is as wide as the widest line of any multi-line string in the same table
+            multi = [s for s in strings if '\n' in s.strip('\n')]
+            box = max([width(self.fnt, l) for s in multi for l in s.split('\n')] or [0])
+            new = [self.english(s, f'{rel}#{i}.{j}', box) for j, s in enumerate(strings)]
             if new != strings:
                 f.set_content(i, sta.write(new, *[int.from_bytes(data[4:8], 'little')]))
                 changed = True

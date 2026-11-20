@@ -91,7 +91,8 @@ rectangle and draws the English with Windows fonts (Impact, Arial, Times), re-en
       subtitles. Release impact: the re-encoded movies are ~129 MB, so their xdelta patches are about that size.
 - [ ] Movies: in-game playback of a re-encoded movie not yet seen (Vita3K can't get past the 3D stages)
 - [x] Intro narration before Story Mode chapter 1 = movie msn/STR_000_000 (centred lines on black; the subtitle
-      scan only looked at the bottom band): 4 cues
+      scan only looked at the bottom band): 4 cues; the villain's red narration in msn/STR_001_000: 6 cues.
+      Ending = staff roll (kept Japanese like the credits table)
 ### Phase 6: DLC
 - [x] DLC = three 0-byte unlock flags. The characters ship in update 1.02. No DLC text.
 

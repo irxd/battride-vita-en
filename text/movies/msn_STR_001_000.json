@@ -1,0 +1,17 @@
+{
+ "style": "msn",
+ "cues": [
+  {"start": 0.6, "end": 7.35, "box": [110, 186, 610, 229],
+   "en": "Kamen Riders... as loathsome a lot as ever."},
+  {"start": 7.4, "end": 13.6, "box": [110, 186, 610, 229],
+   "en": "Kamen Riders... as loathsome a lot as ever.\nBut today, that history comes to an end."},
+  {"start": 33.6, "end": 37.35, "box": [110, 186, 610, 229],
+   "en": "So, two of you remain..."},
+  {"start": 37.4, "end": 43.6, "box": [110, 186, 610, 229],
+   "en": "So, two of you remain...\nThen you two shall be the sacrifice that completes my revenge."},
+  {"start": 43.65, "end": 50.65, "box": [110, 186, 610, 229],
+   "en": "The flame of hope will die, and arrogant humanity will remember..."},
+  {"start": 50.7, "end": 57.9, "box": [110, 186, 610, 229],
+   "en": "The flame of hope will die, and arrogant humanity will remember...\n...that they were always meant to be ruled."}
+ ]
+}

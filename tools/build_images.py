@@ -309,6 +309,7 @@ HUD_EDITS = {
                 ((144, 232, 206, 255), 'down!', HUD_GOLD)),
     155: labels(*grid(0, 276, 116, 20, [[t] for t in HUD_ROWS], HUD),
                 ((200, 224, 236, 244), 'Now', HUD), ((200, 244, 236, 264), 'Left', HUD),
+                ((216, 60, 236, 77), '', HUD), ((236, 60, 256, 77), '', HUD),     # counter suffixes 枚 / 体
                 ((1, 256, 31, 275), 'Body', STAT), ((33, 256, 62, 275), 'Body', STAT_OFF),
                 ((63, 256, 95, 275), 'Mind', STAT), ((97, 256, 126, 275), 'Mind', STAT_OFF),
                 ((128, 256, 159, 275), 'Sense', STAT), ((161, 256, 190, 275), 'Sense', STAT_OFF),

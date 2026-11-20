@@ -399,6 +399,16 @@ EDITS = {
 }
 
 
+# loose GXT files (nativeVITA/ui/gadget/*): per-rider battle gadgets
+GADGET = Style(font='timesbd.ttf', size=20, fill=(240, 240, 240), outline=(90, 0, 0), ow=1)
+LOOSE = {
+    'nativeVITA/ui/gadget/GadgetBlade/textures/GadgetBlade_CO.tex': labels(((259, 66, 336, 97), 'AP Cost', replace(GADGET, font='timesbi.ttf'))),
+    'nativeVITA/ui/gadget/GadgetGarren/textures/Gadgetgarren_CO.tex': labels(((259, 66, 336, 97), 'AP Cost', replace(GADGET, font='timesbi.ttf'))),
+    'nativeVITA/ui/gadget/GadgetIbuki/textures/GadgetIbuki_CO.tex': labels(((162, 32, 220, 62), 'Stones', replace(GADGET, outline=(15, 20, 60)))),
+    'nativeVITA/ui/gadget/GadgetBirth/textures/gadgetbirth_CO.tex': labels(((415, 2, 449, 30), '', GADGET)),
+}
+
+
 # ---------------------------------------------------------------- texture patching
 def encode_blocks(img, t, raw, boxes):
     """Re-encode the 4x4 blocks covering boxes; returns new raw (swizzled) texture data."""
@@ -451,6 +461,15 @@ def main():
         dst.parent.mkdir(parents=True, exist_ok=True)
         dst.write_bytes(f.build())
         print(f'{rel}: {len(edits)} textures')
+    if not a.only or 'gadget' in a.only:
+        for rel, edit in LOOSE.items():
+            data, img = patch_gxt(game_file(rel).read_bytes(), edit)
+            dst = a.out / rel
+            dst.parent.mkdir(parents=True, exist_ok=True)
+            dst.write_bytes(data)
+            if a.preview:
+                img.save(a.preview / (Path(rel).stem + '.png'))
+        print(f'loose gadget textures: {len(LOOSE)}')
 
 
 if __name__ == '__main__':

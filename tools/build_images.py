@@ -316,6 +316,9 @@ HUD_EDITS = {
                 *grid(145, 348, 31, 16, [['SPD', 'SP'], ['FIN', 'GRD']], SKILL),
                 *grid(145, 380, 31, 16, [['SPD', 'SP'], ['FIN', 'GRD']], SKILL_OFF)),
     157: labels(((126, 35, 252, 56), 'Shop Points Earned', HUD)),
+    # tag partner mode (SSAD action/0239 Com_AT rows, 36x12)
+    331: labels(*grid(148, 392, 36, 12, [['Attack'], ['Guard'], ['Support']],
+                      Style(font='arialbd.ttf', size=10, fill=(235, 235, 235)))),
 }
 
 # main menu (ui/menu.fpk 0352): two columns of items (plain / highlighted), header 'Title' (408,536)-(560,568)

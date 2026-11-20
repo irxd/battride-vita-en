@@ -1,0 +1,205 @@
+{
+ "style": "bar",
+ "cues": [
+  {
+   "start": 3.4,
+   "end": 5.6,
+   "en": "BLACK: Nobuhiko... is that you!?"
+  },
+  {
+   "start": 7.0,
+   "end": 8.6,
+   "en": "BLACK: The one who tried to erase us Riders from history...!!"
+  },
+  {
+   "start": 10.5,
+   "end": 11.6,
+   "en": "Shadow Moon: Long time no see, Black Sun."
+  },
+  {
+   "start": 13.4,
+   "end": 14.6,
+   "en": "Shadow Moon: So you stand in my way after all."
+  },
+  {
+   "start": 17.4,
+   "end": 19.6,
+   "en": "BLACK: ...If you threaten the peace of humanity,"
+  },
+  {
+   "start": 21.4,
+   "end": 23.6,
+   "en": "BLACK: I'll defeat you as many times as it takes!!"
+  },
+  {
+   "start": 26.7,
+   "end": 29.6,
+   "en": "Shadow Moon: Did you think power like that could stop my years of hatred!!"
+  },
+  {
+   "start": 31.4,
+   "end": 33.6,
+   "en": "BLACK: ...Years of hatred? And this presence..."
+  },
+  {
+   "start": 35.4,
+   "end": 37.0,
+   "en": "BLACK: You're... not Nobuhiko!"
+  },
+  {
+   "start": 39.0,
+   "end": 42.6,
+   "en": "???: Hoh, so you noticed... Black Sun."
+  },
+  {
+   "start": 44.0,
+   "end": 45.6,
+   "en": "???: Indeed... Nobuhiko Akizuki, Shadow Moon,"
+  },
+  {
+   "start": 47.0,
+   "end": 49.1,
+   "en": "???: no longer exists in this world."
+  },
+  {
+   "start": 51.0,
+   "end": 52.1,
+   "en": "???: My name is the Creation King!"
+  },
+  {
+   "start": 54.4,
+   "end": 55.6,
+   "en": "BLACK: The Creation King..."
+  },
+  {
+   "start": 57.4,
+   "end": 60.6,
+   "en": "BLACK: Impossible! I buried you back then...!!"
+  },
+  {
+   "start": 63.0,
+   "end": 65.1,
+   "en": "Creation King: Indeed, Black Sun... but I have returned."
+  },
+  {
+   "start": 67.0,
+   "end": 70.1,
+   "en": "Creation King: That cursed day you ran my heart through..."
+  },
+  {
+   "start": 72.0,
+   "end": 74.6,
+   "en": "Creation King: Do you remember what I said then?"
+  },
+  {
+   "start": 77.0,
+   "end": 84.2,
+   "en": "Creation King: I will return. As long as evil lives in human hearts, I will surely return!"
+  },
+  {
+   "start": 85.5,
+   "end": 89.1,
+   "en": "Creation King: True to those words, I dwelt in the evil of human hearts, reborn again and again."
+  },
+  {
+   "start": 90.0,
+   "end": 93.6,
+   "en": "Creation King: Gathering strength over a dizzying span of time, I waited for the day of my revival!"
+  },
+  {
+   "start": 96.0,
+   "end": 100.1,
+   "en": "Creation King: And in a world far in the future, I finally found it."
+  },
+  {
+   "start": 102.0,
+   "end": 104.1,
+   "en": "Creation King: Yes, a device that can travel back through time...!"
+  },
+  {
+   "start": 106.4,
+   "end": 111.6,
+   "en": "Creation King: With that device I returned to the past and moved my spirit into Shadow Moon's corpse."
+  },
+  {
+   "start": 113.0,
+   "end": 119.0,
+   "en": "Creation King: To take my revenge on you, and claim this world as mine once more!"
+  },
+  {
+   "start": 121.0,
+   "end": 126.1,
+   "en": "Creation King: It was fun, Black Sun. Erasing your beloved comrades, the Kamen Riders, from this world!"
+  },
+  {
+   "start": 128.4,
+   "end": 129.6,
+   "en": "BLACK: You...!!"
+  },
+  {
+   "start": 132.0,
+   "end": 135.1,
+   "en": "Creation King: ...And yet my heart still found no relief."
+  },
+  {
+   "start": 137.0,
+   "end": 140.1,
+   "en": "Creation King: Hatred piled so high could never be cleared by that much!"
+  },
+  {
+   "start": 142.0,
+   "end": 145.1,
+   "en": "Creation King: So when you came back, never learning your lesson..."
+  },
+  {
+   "start": 147.0,
+   "end": 150.1,
+   "en": "Creation King: I realised that along with my rage, there was joy in my heart."
+  },
+  {
+   "start": 152.4,
+   "end": 154.6,
+   "en": "Creation King: Now I get to see your faces twisted in pain again!"
+  },
+  {
+   "start": 156.4,
+   "end": 158.6,
+   "en": "Creation King: To watch you struggle like insects!"
+  },
+  {
+   "start": 160.0,
+   "end": 167.6,
+   "en": "Creation King: It was a masterpiece! Watching you trade blows with your old friends!!"
+  },
+  {
+   "start": 168.5,
+   "end": 170.6,
+   "en": "No. 1: ...Is that all you have to say?"
+  },
+  {
+   "start": 171.5,
+   "end": 172.0,
+   "en": "Creation King: What...?"
+  },
+  {
+   "start": 173.5,
+   "end": 176.1,
+   "en": "No. 1: No matter how many times you return, no matter how often you erase us from history,"
+  },
+  {
+   "start": 178.0,
+   "end": 180.4,
+   "en": "No. 1: we'll return each time too, and stop your ambitions!"
+  },
+  {
+   "start": 181.3,
+   "end": 185.5,
+   "en": "No. 1: As long as there is evil in this world... we Kamen Riders are immortal!!"
+  },
+  {
+   "start": 187.4,
+   "end": 193.1,
+   "en": "Creation King: ...Interesting! Then satisfy me, Kamen Riders!!"
+  }
+ ]
+}

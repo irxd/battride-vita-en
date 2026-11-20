@@ -1,0 +1,38 @@
+{
+ "style": "msn",
+ "cues": [
+  {
+   "start": 6.67,
+   "end": 10.1,
+   "en": "Watch me. My henshin!",
+   "box": [
+    291,
+    349,
+    362,
+    367
+   ]
+  },
+  {
+   "start": 19.2,
+   "end": 21.77,
+   "en": "Uoryaaaah!",
+   "box": [
+    323,
+    348,
+    385,
+    366
+   ]
+  },
+  {
+   "start": 27.467,
+   "end": 31.3,
+   "en": "Bigaragu bazubi Kuuga\n(You will become Kuuga)",
+   "box": [
+    339,
+    342,
+    433,
+    371
+   ]
+  }
+ ]
+}

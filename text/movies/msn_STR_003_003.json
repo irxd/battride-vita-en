@@ -1,0 +1,16 @@
+{
+ "style": "msn",
+ "cues": [
+  {
+   "start": 2.9,
+   "end": 5.6,
+   "en": "Looks like I can't afford\nto hold back any longer.",
+   "box": [
+    293,
+    342,
+    413,
+    374
+   ]
+  }
+ ]
+}

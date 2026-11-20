@@ -1,0 +1,71 @@
+{
+ "style": "msn",
+ "cues": [
+  {
+   "start": 4.2,
+   "end": 9.5,
+   "en": "Decade...\nyou must travel through nine worlds.",
+   "box": [
+    242,
+    342,
+    466,
+    371
+   ]
+  },
+  {
+   "start": 10.2,
+   "end": 13.8,
+   "en": "That is the only way to save the worlds.",
+   "box": [
+    262,
+    347,
+    387,
+    365
+   ]
+  },
+  {
+   "start": 24.0,
+   "end": 27.6,
+   "en": "You are the destroyer of all Kamen Riders.",
+   "box": [
+    248,
+    347,
+    422,
+    365
+   ]
+  },
+  {
+   "start": 28.3,
+   "end": 31.8,
+   "en": "After all, creation is only born from destruction...",
+   "box": [
+    251,
+    347,
+    461,
+    366
+   ]
+  },
+  {
+   "start": 39.467,
+   "end": 42.7,
+   "en": "Then I'll save the worlds.",
+   "box": [
+    337,
+    347,
+    421,
+    365
+   ]
+  },
+  {
+   "start": 42.7,
+   "end": 45.3,
+   "en": "I am the destroyer of worlds.",
+   "box": [
+    306,
+    347,
+    400,
+    366
+   ]
+  }
+ ]
+}

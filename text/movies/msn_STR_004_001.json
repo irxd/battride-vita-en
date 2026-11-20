@@ -1,0 +1,170 @@
+{
+ "style": "msn",
+ "cues": [
+  {
+   "start": 7.6,
+   "end": 10.9,
+   "en": "This presence... it can't be!",
+   "box": [
+    305,
+    347,
+    357,
+    365
+   ]
+  },
+  {
+   "start": 11.367,
+   "end": 20.0,
+   "en": "This body is mine now.\nAnd so is your power, Creation King.",
+   "box": [
+    274,
+    342,
+    439,
+    371
+   ]
+  },
+  {
+   "start": 23.8,
+   "end": 30.3,
+   "en": "Nobuhiko...!\nMust we really fight?",
+   "box": [
+    287,
+    334,
+    436,
+    383
+   ]
+  },
+  {
+   "start": 30.7,
+   "end": 36.5,
+   "en": "Black Sun,\nI no longer need your King Stone.",
+   "box": [
+    260,
+    342,
+    451,
+    371
+   ]
+  },
+  {
+   "start": 36.867,
+   "end": 42.5,
+   "en": "At last, I have gained the power\nof the Creation King!!",
+   "box": [
+    276,
+    342,
+    443,
+    371
+   ]
+  },
+  {
+   "start": 46.3,
+   "end": 52.5,
+   "en": "Now begins my reign,\none that will last fifty thousand years!",
+   "box": [
+    303,
+    342,
+    419,
+    371
+   ]
+  },
+  {
+   "start": 62.033,
+   "end": 66.9,
+   "en": "I will send my other selves into every era,",
+   "box": [
+    348,
+    347,
+    445,
+    366
+   ]
+  },
+  {
+   "start": 66.9,
+   "end": 73.8,
+   "en": "and become ruler of humanity... no, of this whole universe!!",
+   "box": [
+    336,
+    347,
+    461,
+    365
+   ]
+  },
+  {
+   "start": 78.8,
+   "end": 80.3,
+   "en": "...I won't let you!",
+   "box": [
+    351,
+    347,
+    406,
+    364
+   ]
+  },
+  {
+   "start": 81.067,
+   "end": 87.2,
+   "en": "The original Kamen Rider, is it?\nWhy not take a rest already?",
+   "box": [
+    298,
+    342,
+    415,
+    371
+   ]
+  },
+  {
+   "start": 88.6,
+   "end": 90.3,
+   "en": "As long as people call for help,",
+   "box": [
+    299,
+    347,
+    414,
+    366
+   ]
+  },
+  {
+   "start": 90.3,
+   "end": 95.7,
+   "en": "as long as evil remains in this world,\nI will never withdraw from the fight!",
+   "box": [
+    285,
+    342,
+    432,
+    371
+   ]
+  },
+  {
+   "start": 98.0,
+   "end": 102.2,
+   "en": "Rider... henshin!!",
+   "box": [
+    363,
+    347,
+    416,
+    366
+   ]
+  },
+  {
+   "start": 110.2,
+   "end": 115.0,
+   "en": "That is the hero...\nKamen Rider No. 1!!",
+   "box": [
+    305,
+    342,
+    401,
+    371
+   ]
+  },
+  {
+   "start": 115.167,
+   "end": 119.2,
+   "en": "Follow me!\nKamen Riders!!",
+   "box": [
+    306,
+    342,
+    411,
+    371
+   ]
+  }
+ ]
+}

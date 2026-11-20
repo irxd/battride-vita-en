@@ -1,0 +1,16 @@
+{
+ "style": "msn",
+ "cues": [
+  {
+   "start": 0.067,
+   "end": 2.5,
+   "en": "Show me. Your power.",
+   "box": [
+    298,
+    344,
+    418,
+    369
+   ]
+  }
+ ]
+}

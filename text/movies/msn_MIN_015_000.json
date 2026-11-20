@@ -1,0 +1,71 @@
+{
+ "style": "msn",
+ "cues": [
+  {
+   "start": 0.2,
+   "end": 7.4,
+   "en": "...Then if running out of here right now\nmeans I can save everyone!",
+   "box": [
+    265,
+    341,
+    445,
+    371
+   ]
+  },
+  {
+   "start": 7.5,
+   "end": 9.9,
+   "en": "I'm done thinking!",
+   "box": [
+    302,
+    347,
+    356,
+    366
+   ]
+  },
+  {
+   "start": 18.7,
+   "end": 21.2,
+   "en": "What? Who are you?",
+   "box": [
+    352,
+    347,
+    399,
+    365
+   ]
+  },
+  {
+   "start": 21.3,
+   "end": 25.4,
+   "en": "Sorry, but I don't know either. This is my first ride.",
+   "box": [
+    263,
+    347,
+    446,
+    366
+   ]
+  },
+  {
+   "start": 25.7,
+   "end": 28.2,
+   "en": "Monsters!",
+   "box": [
+    337,
+    347,
+    381,
+    365
+   ]
+  },
+  {
+   "start": 29.733,
+   "end": 30.4,
+   "en": "Come along for a ride!",
+   "box": [
+    303,
+    344,
+    416,
+    368
+   ]
+  }
+ ]
+}

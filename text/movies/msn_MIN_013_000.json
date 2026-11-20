@@ -1,0 +1,27 @@
+{
+ "style": "msn",
+ "cues": [
+  {
+   "start": 6.567,
+   "end": 10.9,
+   "en": "Do you have the courage... to share a ride with a devil?",
+   "box": [
+    273,
+    347,
+    450,
+    366
+   ]
+  },
+  {
+   "start": 11.567,
+   "end": 14.3,
+   "en": "Uoooooooooh!!",
+   "box": [
+    302,
+    344,
+    424,
+    368
+   ]
+  }
+ ]
+}

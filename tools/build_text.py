@@ -48,6 +48,8 @@ def archives():
 def load_translations():
     tr, where = {}, {}
     for p in sorted((ROOT / 'text').rglob('*.json')):
+        if 'movies' in p.parts:       # movie subtitle cues (tools/build_movies.py), not string translations
+            continue
         for k, v in json.loads(p.read_text(encoding='utf8')).items():
             if k in tr and tr[k] != v:
                 print(f'warning: {k} has different English in {where[k]} and {p.name}')

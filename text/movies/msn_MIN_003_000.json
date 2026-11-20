@@ -1,0 +1,115 @@
+{
+ "style": "msn",
+ "cues": [
+  {
+   "start": 3.47,
+   "end": 5.9,
+   "en": "Full energy!",
+   "box": [
+    319,
+    347,
+    401,
+    365
+   ]
+  },
+  {
+   "start": 11.8,
+   "end": 14.8,
+   "en": "Uwaaaaaaaah...!!",
+   "box": [
+    297,
+    347,
+    426,
+    365
+   ]
+  },
+  {
+   "start": 18.5,
+   "end": 22.7,
+   "en": "After that many hits,\nKamen Rider must be dead for sure.",
+   "box": [
+    279,
+    342,
+    428,
+    371
+   ]
+  },
+  {
+   "start": 23.7,
+   "end": 26.1,
+   "en": "Until I defeat Destron...",
+   "box": [
+    287,
+    347,
+    429,
+    365
+   ]
+  },
+  {
+   "start": 26.2,
+   "end": 29.1,
+   "en": "Kamen Rider will not die!",
+   "box": [
+    297,
+    347,
+    412,
+    365
+   ]
+  },
+  {
+   "start": 29.333,
+   "end": 33.1,
+   "en": "Stubborn fool, die!",
+   "box": [
+    301,
+    347,
+    415,
+    365
+   ]
+  },
+  {
+   "start": 34.4,
+   "end": 34.9,
+   "en": "Wait!",
+   "box": [
+    342,
+    347,
+    376,
+    366
+   ]
+  },
+  {
+   "start": 38.9,
+   "end": 42.1,
+   "en": "Ooh! It worked!",
+   "box": [
+    333,
+    344,
+    417,
+    383
+   ]
+  },
+  {
+   "start": 42.1,
+   "end": 43.267,
+   "en": "Hmm!",
+   "box": [
+    347,
+    340,
+    381,
+    365
+   ]
+  },
+  {
+   "start": 51.9,
+   "end": 56.2,
+   "en": "Kamen Rider V3!!",
+   "box": [
+    307,
+    347,
+    361,
+    365
+   ]
+  }
+ ]
+}

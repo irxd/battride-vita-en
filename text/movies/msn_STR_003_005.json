@@ -1,0 +1,16 @@
+{
+ "style": "msn",
+ "cues": [
+  {
+   "start": 3.067,
+   "end": 5.567,
+   "en": "My heart has reached its peak!!!",
+   "box": [
+    296,
+    332,
+    384,
+    365
+   ]
+  }
+ ]
+}

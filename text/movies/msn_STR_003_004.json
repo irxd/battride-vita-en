@@ -1,0 +1,16 @@
+{
+ "style": "msn",
+ "cues": [
+  {
+   "start": 0.1,
+   "end": 3.7,
+   "en": "Uoooooooaaaaaaah!!!!",
+   "box": [
+    265,
+    347,
+    451,
+    365
+   ]
+  }
+ ]
+}

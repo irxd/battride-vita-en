@@ -1,0 +1,45 @@
+{
+ "style": "bar",
+ "cues": [
+  {
+   "start": 3.4,
+   "end": 6.6,
+   "en": "Faiz: The train still isn't moving...?"
+  },
+  {
+   "start": 9.0,
+   "end": 12.1,
+   "en": "Drive: Even if it moves, that invisible wall should still be there."
+  },
+  {
+   "start": 14.0,
+   "end": 17.1,
+   "en": "Drive: As long as it's there, we can't reach where we're headed!"
+  },
+  {
+   "start": 18.9,
+   "end": 22.1,
+   "en": "Shadow Moon: I won't let you through."
+  },
+  {
+   "start": 23.9,
+   "end": 26.0,
+   "en": "Shadow Moon: Not to him..."
+  },
+  {
+   "start": 27.4,
+   "end": 31.1,
+   "en": "Shadow Moon: Not to that accursed Black Sun!!"
+  },
+  {
+   "start": 33.4,
+   "end": 34.6,
+   "en": "Agito: Black Sun?"
+  },
+  {
+   "start": 36.9,
+   "end": 39.1,
+   "en": "Ryuki: Something's seriously wrong with that thing...!"
+  }
+ ]
+}

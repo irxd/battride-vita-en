@@ -1,0 +1,38 @@
+{
+ "style": "msn",
+ "cues": [
+  {
+   "start": 1.95,
+   "end": 4.3,
+   "en": "This is where the real fight begins!",
+   "box": [
+    300,
+    343,
+    418,
+    369
+   ]
+  },
+  {
+   "start": 7.2,
+   "end": 8.5,
+   "en": "Haah!",
+   "box": [
+    300,
+    343,
+    418,
+    369
+   ]
+  },
+  {
+   "start": 9.6,
+   "end": 12.833,
+   "en": "Go forth, my servants!",
+   "box": [
+    306,
+    347,
+    393,
+    366
+   ]
+  }
+ ]
+}

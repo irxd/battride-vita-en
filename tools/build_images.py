@@ -287,11 +287,41 @@ PLATES = {
     151: 'Zangetsu Shin',
 }
 
+# battle HUD (ui/action.fpk): boxes are the measured glyph boxes (or SSAD rows where known)
+KO_BIG = Style(font='impact.ttf', size=40, fill=((255, 245, 230), (240, 130, 80)), outline=(60, 20, 10), ow=2,
+               slant=0.12)
+KO_GOLD = Style(font='impact.ttf', size=40, fill=((255, 250, 180), (230, 170, 30)), outline=(90, 50, 0), ow=1,
+                glow=(255, 220, 60), gr=2.5, glow_alpha=0.6, slant=0.12)
+CLEAR_RED = Style(font='impact.ttf', size=38, fill=((255, 210, 60), (230, 40, 10)), outline=(255, 230, 120), ow=1,
+                  slant=0.12)
+HUD = Style(font='arialbd.ttf', size=13, fill=((255, 255, 255), (200, 200, 200)), outline=(30, 20, 10), ow=1)
+HUD_GOLD = replace(HUD, fill=((255, 255, 230), (240, 200, 90)), slant=0.1)
+STAT = Style(font='arialbd.ttf', size=13, fill=(240, 160, 40), outline=(40, 15, 0), ow=1)
+STAT_OFF = replace(STAT, fill=(115, 95, 65))
+SKILL = Style(font='arialbd.ttf', size=12, fill=(255, 130, 235), outline=(70, 0, 60), ow=1)
+SKILL_OFF = replace(SKILL, fill=(125, 125, 125), outline=(35, 35, 35))
+HUD_ROWS = ['Side Basshaa', 'Riders Defeated', 'Transcend!', 'Crimson Gauge', 'Beast Magic', 'Mirror World Gate',
+            'Collecting Cell Medals', 'Key Item', 'Restricted']
+HUD_EDITS = {
+    153: labels(((0, 0, 134, 50), 'Defeated!', KO_BIG), ((0, 50, 134, 100), 'Defeated!', KO_GOLD)),
+    154: labels(((0, 112, 118, 160), 'Clear!', CLEAR_RED), ((0, 162, 118, 210), 'Clear!', KO_GOLD),
+                ((176, 188, 206, 206), 'Now', HUD_GOLD), ((144, 210, 206, 231), 'to go!!', HUD_GOLD),
+                ((144, 232, 206, 255), 'down!', HUD_GOLD)),
+    155: labels(*grid(0, 276, 116, 20, [[t] for t in HUD_ROWS], HUD),
+                ((200, 224, 236, 244), 'Now', HUD), ((200, 244, 236, 264), 'Left', HUD),
+                ((1, 256, 31, 275), 'Body', STAT), ((33, 256, 62, 275), 'Body', STAT_OFF),
+                ((63, 256, 95, 275), 'Mind', STAT), ((97, 256, 126, 275), 'Mind', STAT_OFF),
+                ((128, 256, 159, 275), 'Sense', STAT), ((161, 256, 190, 275), 'Sense', STAT_OFF),
+                *grid(145, 348, 31, 16, [['SPD', 'SP'], ['FIN', 'GRD']], SKILL),
+                *grid(145, 380, 31, 16, [['SPD', 'SP'], ['FIN', 'GRD']], SKILL_OFF)),
+    157: labels(((126, 35, 252, 56), 'Shop Points Earned', HUD)),
+}
+
 PAUSE = [['Bonus Settings', 'Shop'], ['Custom Soundtrack', 'View Cards'], ['Skills', 'Move List'],
          ['Forms', 'View Skills'], ['Cards', 'Game Settings'], ['Change Figure', 'Buy Voices'], ['Buy BGM', None]]
 
 EDITS = {
-    'nativeVITA/_fpk/ui/action.fpk': {i: cutin(t) for i, t in CUTINS.items()},
+    'nativeVITA/_fpk/ui/action.fpk': {**{i: cutin(t) for i, t in CUTINS.items()}, **HUD_EDITS},
     'nativeVITA/_fpk/ui/title.fpk': {4: notice},
     'nativeVITA/_fpk/ui/common.fpk': {
         # yes/no: highlighted (glow) and plain (outline) versions; SSAD 0011 Yes (0,40,60,68), 0010 No (0,112,80,144)

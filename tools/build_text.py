@@ -59,6 +59,7 @@ def load_translations():
 TAG = re.compile(r'</?COLOR[^>]*>')
 FIRST_MISSION_TABLE = 55          # string.fpk tables from here on are mission dialogue and banners
 DIALOG_WIDTH, DIALOG_LINES = 325, 2
+NARRATION_WIDTH = 860             # centered story narration: one line, nearly the 960 px screen
 SPOKEN = re.compile('[。！？…」）]')   # spoken lines end like 。！？…」） ; banners don't
 
 
@@ -115,7 +116,10 @@ class Builder:
         jp_lines = jp.split('\n')
         limit = max([width(self.fnt, l) for l in jp_lines] + [box if len(jp_lines) > 1 else 0])
         max_lines = max(len(jp_lines), box_lines if len(jp_lines) > 1 else 0)
-        if dialog and SPOKEN.search(jp) and len(jp_lines) <= DIALOG_LINES:
+        if dialog and len(jp_lines) == 1 and limit > DIALOG_WIDTH + 13:
+            # a line wider than the dialogue box: centered story narration, one line across the screen
+            limit, max_lines = max(limit, NARRATION_WIDTH), 1
+        elif dialog and SPOKEN.search(jp) and len(jp_lines) <= DIALOG_LINES:
             # mission dialogue box (verified in Vita3K): 2 lines of up to ~340 px, whatever the Japanese used
             limit, max_lines = max(limit, DIALOG_WIDTH), DIALOG_LINES
         elif dialog and len(jp_lines) > DIALOG_LINES and self.brief:

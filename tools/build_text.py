@@ -57,6 +57,9 @@ def load_translations():
 
 
 TAG = re.compile(r'</?COLOR[^>]*>')
+FIRST_MISSION_TABLE = 55          # string.fpk tables from here on are mission dialogue and banners
+DIALOG_WIDTH, DIALOG_LINES = 325, 2
+SPOKEN = re.compile('[。！？…」）]')   # spoken lines end like 。！？…」） ; banners don't
 
 
 def width(fnt, line):
@@ -85,7 +88,7 @@ class Builder:
         self.tr, self.fnt = tr, fnt
         self.used, self.issues, self.done, self.total = set(), {}, set(), set()
 
-    def english(self, jp, where, box=0, box_lines=0):
+    def english(self, jp, where, box=0, box_lines=0, dialog=False):
         if not JP.search(jp):
             return jp
         self.total.add(jp)
@@ -102,13 +105,17 @@ class Builder:
             self.issues.setdefault(jp, (where, 'GLYPH', f'not in font: {miss}'))
         jp_lines = jp.split('\n')
         limit = max([width(self.fnt, l) for l in jp_lines] + [box if len(jp_lines) > 1 else 0])
-        if len(jp_lines) > 1:
+        max_lines = max(len(jp_lines), box_lines if len(jp_lines) > 1 else 0)
+        if dialog and SPOKEN.search(jp) and len(jp_lines) <= DIALOG_LINES:
+            # mission dialogue box (verified in Vita3K): 2 lines of up to ~340 px, whatever the Japanese used
+            limit, max_lines = max(limit, DIALOG_WIDTH), DIALOG_LINES
+        if len(jp_lines) > 1 or max_lines > 1:
             en = wrap(en, limit, self.fnt)   # keeps the translation's own line breaks, adds more where too wide
         en_lines = en.split('\n')
         widest = max(width(self.fnt, l) for l in en_lines)
-        if len(jp_lines) == 1 and len(en_lines) == 1 and widest > limit * 1.05 and widest - limit > 8:
+        if max_lines == 1 and len(en_lines) == 1 and widest > limit * 1.05 and widest - limit > 8:
             self.issues.setdefault(jp, (where, 'WIDE', f'{widest:.0f}px vs {limit:.0f}px: {en}'))
-        elif len(en_lines) > max(len(jp_lines), box_lines if len(jp_lines) > 1 else 0):
+        elif len(en_lines) > max_lines:
             self.issues.setdefault(jp, (where, 'LINES', f'{len(en_lines)} lines vs {len(jp_lines)}: {en!r}'))
         return en
 
@@ -125,7 +132,8 @@ class Builder:
             box = max([width(self.fnt, l) for s in multi for l in s.split('\n')] or [0])
             # large tables of one kind of text (e.g. move descriptions) share one box: its height is the most lines
             box_lines = max(len(s.rstrip('\n').split('\n')) for s in multi) if len(multi) >= 20 else 0
-            new = [self.english(s, f'{rel}#{i}.{j}', box, box_lines) for j, s in enumerate(strings)]
+            dialog = rel.endswith('_fpk/string.fpk') and i >= FIRST_MISSION_TABLE
+            new = [self.english(s, f'{rel}#{i}.{j}', box, box_lines, dialog) for j, s in enumerate(strings)]
             if new != strings:
                 f.set_content(i, sta.write(new, *[int.from_bytes(data[4:8], 'little')]))
                 changed = True

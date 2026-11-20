@@ -1,5 +1,4 @@
 {
-  "97ebb7beb2": "Fires a hovering STOP sign shot that freezes enemies it hits for a while.\n\n Down: the shot keeps moving.\n\nUnlocked at Level 5",
   "ffc435292e": "Shoots ahead with the Zenrin Shooter.",
   "54b0f59958": "Kyuuni Dead Heat Rush",
   "389180ccf1": "Releases stored energy to stop all enemies around, then unleashes a furious melee barrage.",
@@ -16,7 +15,7 @@
   "13bd952bcf": "Oomedama",
   "329944c50d": "Heroes' Ranbu",
   "fbc49c59d3": "Builds up power and splits the enemy in front with a downward cut.",
-  "b6f1089fe3": "Slashes the enemy in front with both swords, then a quick-draw cut with the right sword. On hit, turns and brings both swords down.\n\nUsed after 100 KOs, raises attack power for a while.",
+  "b6f1089fe3": "Slashes with both swords, then a quick-draw cut. On hit, turns and brings both swords down.\n\nUsed after 100 KOs, raises attack power for a while.",
   "074b5f3e2c": "Releases powerful lightning from the Gan Gun Saber in Gun Mode.\n\nUsed after 100 KOs, the finisher gauge refills on its own for a while.",
   "dcad1bab8b": "Creates attraction ahead to pull enemies in, then repulsion from his right hand to blast them away.\n\nUsed after 100 KOs, widens attack range for a while.",
   "cb2846d86b": "Fires a powerful arrow of light ahead. Charging raises its power, range and piercing.\n\nUsed after 100 KOs, all movement is faster for a while.",

@@ -1,5 +1,5 @@
 // Optional English game name: edits the Vita's app.db (ur0:shell/db/app.db, the home screen takes the name
-// from there) or Vita3K's param.sfo. Same changes as tools/rename_title.py. No page code here, so it runs the
+// from there) or a param.sfo. Same changes as tools/rename_title.py. No page code here, so it runs the
 // same in the browser and in Node (for testing).
 
 const TITLE_ID = 'PCSG00675';

@@ -8,8 +8,7 @@ the system software). Copy app.db to the PC, run this on it, copy it back and re
 Changed: the tbl_appinfo rows and tbl_appinfo_icon.title of PCSG00675 that still hold the Japanese title
 (仮面ライダー バトライド・ウォー 創生) or short title (バトライド 創生). Nothing else in the database is touched.
 
-Vita3K: it reads sce_sys/param.sfo of the installed game, so run this on
-<Vita3K data>/ux0/app/PCSG00675/sce_sys/param.sfo.
+A param.sfo (sce_sys/param.sfo) is also accepted: its TITLE/STITLE fields are changed.
 
 A copy of the original is kept next to the file (<name>.orig) on the first run; --restore puts it back.
 """
@@ -53,7 +52,7 @@ def rename_sfo(path):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split('\n')[0])
-    ap.add_argument('file', help='app.db (real Vita) or param.sfo (Vita3K)')
+    ap.add_argument('file', help='app.db (ur0:shell/db/app.db) or param.sfo')
     ap.add_argument('--restore', action='store_true', help='put back the original file saved on the first run')
     a = ap.parse_args()
     p = Path(a.file)

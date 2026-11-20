@@ -213,7 +213,7 @@ function zipSink(path, list) {
   };
 }
 
-// Optional English game name: app.db (real Vita) or param.sfo (Vita3K) in, the changed file saved back out.
+// Optional English game name: app.db (or a param.sfo) in, the changed file saved back out.
 async function renameTitle(file) {
   const note = $('#title-note'), meta = $('#title-meta');
   hideError();
@@ -237,7 +237,7 @@ async function renameTitle(file) {
     a.remove();
     setTimeout(() => URL.revokeObjectURL(a.href), 60_000);
     note.textContent = kind === 'sfo'
-      ? 'Saved param.sfo: put it back in sce_sys/ and restart Vita3K.'
+      ? 'Saved param.sfo: put it back in sce_sys/.'
       : 'Saved app.db: copy it back to ur0:shell/db/ and restart the Vita.';
     meta.textContent = 'Done';
   } catch (err) {

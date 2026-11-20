@@ -4,8 +4,8 @@ Usage:
     python apply_patches.py <decrypted game folder> [<decrypted update folder>] [--out <folder>]
 
 The folders are the decrypted copies of ux0:app/PCSG00675 (game) and ux0:patch/PCSG00675 (update 1.02), e.g.
-copied from VitaShell's "Open decrypted" over FTP, or Vita3K's ux0/app/PCSG00675 (Vita3K merges the update
-into it, so one folder is enough). Each file is matched by its path and SHA-1, then patched.
+copied from VitaShell's "Open decrypted" over FTP (if the update is already merged into the game folder, one
+folder is enough). Each file is matched by its path and SHA-1, then patched.
 
 Output: <out>/rePatch/PCSG00675/... (default out: the current folder). Copy that rePatch folder to ux0: on the
 Vita (needs the rePatch plugin).

@@ -87,23 +87,13 @@ Your files in `ux0:app` and `ux0:patch` are not changed.
    No other tools are needed (the xdelta patches are applied by the script itself; `xdelta3 -d` works too).
 4. Copy `out\rePatch` to `ux0:` on the Vita.
 
-### Vita3K
-
-1. Back up `<Vita3K data>/ux0/app/PCSG00675/nativeVITA` (Vita3K merges the update into this folder, so it
-   is the only folder you need).
-2. Choose that `PCSG00675` folder in the web patcher under **Game folder** (the update folder is not needed),
-   or run `apply_patches.py` on it.
-3. Copy the contents of the patcher's `rePatch/PCSG00675/` into `ux0/app/PCSG00675/`, replacing the files there.
-4. Optional: English name in the game list: choose `ux0/app/PCSG00675/sce_sys/param.sfo` under
-   **Optional: English game name**, put the new file in its place and restart Vita3K.
-
 ### Updating to a new patch version
 
 Patch your **original** files again and replace the files in `ux0:rePatch/PCSG00675/`.
 
 ### Removing the patch
 
-Delete `ux0:rePatch/PCSG00675/` (Vita3K: put back your backup). If you changed `app.db`, copy your backup back
+Delete `ux0:rePatch/PCSG00675/`. If you changed `app.db`, copy your backup back
 to `ur0:shell/db/app.db` and restart the Vita.
 
 ## Known issues
@@ -111,6 +101,7 @@ to `ur0:shell/db/app.db` and restart the Vita.
 - First translation pass: some lines may overflow their text box. Please report them with a screenshot.
 - Some tiny labels (record screen, result screen, portrait name tags) are still Japanese.
 - Credits staff names are left in Japanese.
+- Made for a real PS Vita only. Emulators are not supported.
 
 ---
 
@@ -131,7 +122,6 @@ See [CLAUDE.md](CLAUDE.md) for the local data layout and [PLAN.md](PLAN.md) for 
 python -P -X utf8 tools/build_text.py build     # text + font  -> build/rePatch/PCSG00675
 python -P tools/build_images.py                  # UI textures  -> build/rePatch/PCSG00675
 python -P scripts/make_release.py 0.1.0          # both, then xdelta patches -> release/ and docs/patcher/patches/
-python -P scripts/vita3k_install.py              # copy the build into Vita3K for testing
 ```
 
 `make_release.py` needs `xdelta3` and the decrypted game (`scripts/decrypt_vita.ps1`). It makes one patch per
@@ -149,7 +139,7 @@ Pages.
 
 - Translation and tools: this project
 - Official English names: *Kamen Rider: Climax Fighters* (Bandai Namco, PS4, Asia English)
-- Tools used: Vita3K, VitaShell, rePatch, psvpfsparser, xdelta3, capstone, keystone, unicorn, Pillow
+- Tools used: VitaShell, rePatch, psvpfsparser, xdelta3, capstone, keystone, unicorn, Pillow
 - Release pipeline and web patcher adapted from the author's
   [Shin Gundam Musou English patch](https://github.com/irxd/shin-gundam-musou-en)
 

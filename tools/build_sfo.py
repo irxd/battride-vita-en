@@ -1,4 +1,4 @@
-"""Set the game's name in sce_sys/param.sfo (LiveArea bubble / Vita3K game list).
+"""Set the game's name in sce_sys/param.sfo (LiveArea bubble).
 
 Usage: build_sfo.py <original param.sfo> <output param.sfo>
 

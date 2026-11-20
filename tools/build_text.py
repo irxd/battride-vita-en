@@ -120,7 +120,9 @@ class Builder:
             limit, max_lines = max(limit, DIALOG_WIDTH), DIALOG_LINES
         elif dialog and len(jp_lines) > DIALOG_LINES and self.brief:
             # mission briefings share one box: as wide and tall as the largest Japanese briefing
-            limit, max_lines = max(limit, self.brief[0]), max(max_lines, self.brief[1])
+            limit = max(limit, self.brief[0])
+            if '\n\n' in jp:      # only real briefings (paragraphs); other 3+ line texts keep their line count
+                max_lines = max(max_lines, self.brief[1])
         if len(jp_lines) > 1 or max_lines > 1:
             en = wrap(en, limit, self.fnt)   # keeps the translation's own line breaks, adds more where too wide
         en_lines = en.split('\n')

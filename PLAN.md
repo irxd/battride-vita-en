@@ -1,7 +1,8 @@
 # Plan: Battride War Sousei English patch
 
-Status: **Phase 4, translation in progress** (2026-11-20). About 4,100 of 9,377 unique lines are done: all menus,
-names, skills, special moves, figures, tutorials and tips. The rest is mission and story dialogue.
+Status: **Phase 4, first translation pass complete** (2026-11-20). 9,246 of 9,377 unique lines are translated. What
+remains is the credits staff names (table 10, kept in Japanese on purpose) and two dash placeholders. Next: on-device
+overflow review, then Phase 5 (images) and Phase 7 (release).
 
 ## Goal
 
@@ -65,7 +66,7 @@ patches, browser web patcher, optional English home-screen name.
 - [x] Menus, options, contents, tutorials, tips, difficulty, shop, credits headers
 - [x] Rider, form, enemy, support character names; skills, figure effects, special move list (table 43)
 - [x] Character descriptions, figure descriptions, unlock messages, battle cries, story intro (table 27)
-- [ ] Mission dialogue and banners: tables 55-938 (~5,300 lines). Done: 55-61.
+- [x] Mission dialogue, banners, story, battle lines and navigator commentary: tables 55-938
 - [ ] Staff names in the credits (table 10) are still Japanese (readings of real names not guessed)
 - [ ] Glossary file (romanized terms, no Japanese)
 - [ ] Review pass on device

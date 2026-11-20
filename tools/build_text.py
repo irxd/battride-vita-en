@@ -132,7 +132,8 @@ class Builder:
             box = max([width(self.fnt, l) for s in multi for l in s.split('\n')] or [0])
             # large tables of one kind of text (e.g. move descriptions) share one box: its height is the most lines
             box_lines = max(len(s.rstrip('\n').split('\n')) for s in multi) if len(multi) >= 20 else 0
-            dialog = rel.endswith('_fpk/string.fpk') and i >= FIRST_MISSION_TABLE
+            # mission tables of string.fpk, and the per-character battle line archives (same dialogue box)
+            dialog = (rel.endswith('_fpk/string.fpk') and i >= FIRST_MISSION_TABLE) or '/_fpk/chr/' in rel
             new = [self.english(s, f'{rel}#{i}.{j}', box, box_lines, dialog) for j, s in enumerate(strings)]
             if new != strings:
                 f.set_content(i, sta.write(new, *[int.from_bytes(data[4:8], 'little')]))

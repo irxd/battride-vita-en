@@ -1,6 +1,7 @@
 # Plan: Battride War Sousei English patch
 
-Status: **Phase 2, text extraction done; proof of concept next** (2026-11-20)
+Status: **Phase 4, translation in progress** (2026-11-20). About 4,100 of 9,377 unique lines are done: all menus,
+names, skills, special moves, figures, tutorials and tips. The rest is mission and story dialogue.
 
 ## Goal
 
@@ -13,84 +14,79 @@ patches, browser web patcher, optional English home-screen name.
 | Source | What it gives us |
 |---|---|
 | Official English release | **None.** Genesis came out only in Japan (PS4/PS3/Vita). Every line needs a new translation. |
-| froid_san fan patch v0.35 alpha (2019) | Partial: some menus, items, shop. No dialogue, no source code. Proves rePatch works with modified files. Reference only. |
-| Kamen Rider: Climax Fighters (PS4, 2017, Asia English) | Same developer (Eighting), reuses Genesis models. Source of **official English names** for riders, forms and attacks. Optional: needs a PS4 dump. |
-| Shin Gundam Musou patch (`D:\Personal\shin-gundam-musou-en`) | Pipeline to reuse: decrypt script, fself/unfself, eboot hook approach, font widths + word wrap, sha1-keyed JSON, release script, web patcher, title rename. |
+| froid_san fan patch v0.35 alpha (2019) | Partial: some menus, items, shop. No dialogue, no source code. Reference only. |
+| Kamen Rider: Climax Fighters (PS4, 2017, Asia English) | Same developer (Eighting). Source of **official English names**. The user will provide a dump later. |
+| Shin Gundam Musou patch (`D:\Personal\shin-gundam-musou-en`) | Pipeline to reuse: decrypt script, fself, sha1-keyed JSON, release script, web patcher, title rename. |
 
-## Findings so far
+## Findings
 
 - Dump: game 1.00 (`app`, NoNpDrm) and update 1.02 (`patch`). Both decrypt with psvpfsparser using the game's
-  work.bin key (`scripts/decrypt_vita.ps1`).
-- `nativeVITA/` holds loose files: 675 `.fpk`, 315 `.tex` (GXT textures), 345 `.spm` (models), 516 `.ssa`, 61 `.mp4`
-  movies, shaders, and single tables (`.gpd`, `.redb`, `.boot`, `.fgr`, …).
-- **No plaintext Japanese** in loose files. Text is inside FPK2 archives.
-- **FPK2 is solved** (`tools/fpk.py`, details in its docstring): 0x30 header, entry table encrypted with a custom
-  8-byte-key cipher (verified against the eboot code under Unicorn, `tools/re/emu.py`), CRC-32/BZIP2 per entry, data
-  is plain zlib. Identical files share one data block. All 675 archives rebuild byte-identical. Changed entries are
-  written in place or appended, so patches stay small. Header bytes 0x14–0x27 are unexplained (not a simple CRC);
-  confirm on a real run that the game doesn't check them.
-- **Text = `STA\0` files**, UTF-8, no NUL terminators:
-  `"STA\0", u32 0x20120313, u32 count, u32 0, count × (u32 byte length, bytes)`. Hard `\n` line breaks.
-  - `_fpk/string.fpk`: 848 STA files, **9,329 unique strings, ~200k Japanese characters**. This is the master set.
-  - `_fpk/drama/chr/**` (story scene lines) and `_fpk/chr/**` (battle lines per character): every line also
-    appears in string.fpk. Many chr lines are the placeholder ダミー（呼び出されません）.
-  - `_fpk/seq.fpk`: Shift-JIS debug printf strings only (not shown in game).
-  - `mission/TALK.fpk`: 433 `WUT\0` files (no text, probably references to string IDs).
-- **Font has full ASCII and proportional metrics**: `font/FOT-NewRodinPro-DB.fnt`, 3664 records of 48 bytes from
-  0x1c: `u32 code, u32 page, f32 u0,v0,u1,v1, f32 ?, w, h, xoff?, yoff?, advance`. 'i' advance 4, 'M' 13,
-  Japanese 13, space 10 (too wide for English, tune it). Probably **no eboot font hook needed**.
-- Update 1.02 replaces 89 files, including all of the text archives above. **Build from the 1.02 files.**
-- Font: `font/FOT-NewRodinPro-DB.fnt` (header says 0x0e50 = 3664 glyphs) + textures in `font/vita/`. It's a bitmap
-  font, so English needs proportional widths (as in the Gundam project).
-- 61 movies in `movie/etc/` (opening, ending, chapter scenes). Check whether they have burned-in Japanese text.
-- `eboot.bin` is still an encrypted SELF after PFS decryption.
+  work.bin key (`scripts/decrypt_vita.ps1`). Update 1.02 replaces 89 files, including all text archives: **build from
+  the 1.02 files**. `eboot.bin` stays an encrypted SELF; the ELFs from FAGDec are in `eboot/`.
+- **FPK2 is solved** (`tools/fpk.py`): encrypted entry table (custom cipher, verified against the eboot under Unicorn),
+  CRC-32/BZIP2 per entry, zlib data. All 675 archives rebuild byte-identical. **Repacked archives load fine in Vita3K**
+  (the unexplained header bytes 0x14-0x27 are not checked).
+- **Text = `STA\0` string tables** (`tools/sta.py`), UTF-8, hard `\n` breaks, inline `<COLOR=0x...>` tags, button
+  icons U+E000-U+E00F, `%d`/`%s`. `_fpk/string.fpk` has every line; `drama/chr/**` and `chr/**` repeat some of them.
+  The renderer also knows a `<SIZE=...>` tag but ignores its value (tested 12, 0.8, 80).
+- **Font** (`tools/font.py`): `FOT-NewRodinPro-DB.fnt` has proportional ASCII already. For English the ASCII glyph
+  records are scaled to **85%** (quad size, offsets, advance; same texture), which fits ~18% more text and stays
+  legible (Vita3K screenshots). Space advance 4.5. The header size field does nothing.
+- **Layout rules** in `tools/build_text.py`, checked in Vita3K:
+  - A table's multi-line strings share one box: width = widest Japanese line in the table; large tables (20+
+    multi-line strings) also share a line limit.
+  - **Mission dialogue box** (string.fpk tables 55+): 2 lines of up to ~340 px (325 used) whatever the Japanese
+    line breaks were. Spoken lines wrap to it; one-line banners don't.
+  - The build reports `LINES` (too many lines, must fix) and `WIDE` (one-line label wider than the Japanese; only a
+    problem if it overflows on screen).
+- **Not text** (need images/movies work): the boot notice (ご注意), YES/はい buttons, main menu items, mission kill
+  counter banner (37体倒せ!!), story intro narration (probably in a movie or texture).
+- Vita3K reads only `ux0/app` (merge the update in) and needs the NoNpDrm license in `ux0/license` for the
+  encrypted `sce_module` files: `scripts/vita3k_install.py`. `scripts/vita3k_drive.ps1` drives the game with key
+  presses and screenshots (Circle = C confirms in game, Cross = X confirms system dialogs). The 3D stages don't render
+  in this Vita3K build, but all UI does.
 
 ## Phases
 
 ### Phase 1: Get at the data
-- [x] Decrypt game + update (`scripts/decrypt_vita.ps1`)
-- [x] **Get `eboot.bin.elf`** for 1.00 and 1.02 (FAGDec, in `eboot/`)
-- [x] Reverse the FPK2 loader in the eboot: cipher, key derivation, index layout, compression
-- [x] `tools/fpk.py`: unpack and repack FPK2 byte for byte (round-trip test on every archive)
-- [ ] Check whether the game accepts a repacked archive via rePatch (Vita3K first, then hardware)
+- [x] Decrypt game + update, get the eboot ELFs, reverse FPK2, `tools/fpk.py` with round-trip tests
+- [x] Repacked archive loads in Vita3K
+- [ ] Confirm on hardware (user)
 
 ### Phase 2: Text formats
-- [x] Find the text formats (STA, see Findings)
-- [ ] Extractors and inserters, plus a full dump of all strings to a local (ignored) folder
-- [x] Count lines and characters (9,329 unique strings, ~200k characters)
-- [ ] Look at the froid_san patch output to see which files it changed (confirms the text locations)
+- [x] STA format, full string dump (`extracted/string_dump.txt`, local), counts
 
 ### Phase 3: Font and display
-- [ ] Parse `.fnt` + GXT glyph textures. Draw proportional Latin glyphs into the atlas
-- [ ] eboot hooks (fself) as needed: proportional width, word wrap, shrink-to-fit
-- [ ] First on-device test: a few menu strings in English
+- [x] English renders with the stock font (proportional ASCII); 85% Latin glyphs; narrow space
+- [x] Word wrap to box widths; overflow report
+- [ ] On-device check by the user (overflowing text)
 
-### Phase 4: Translation
-- [ ] Terminology glossary: rider, form, attack and character names (Climax Fighters English, else the common fan
-      names). Stored without Japanese, keyed by hash.
-- [ ] Menus, items, help, tutorials (highest visibility)
-- [ ] Battle dialogue (`TALK.fpk`) and mission messages
-- [ ] Story scenes (`drama.fpk`)
-- [ ] Review pass for line length and wrapping on device
+### Phase 4: Translation (`text/string/*.json`)
+- [x] Menus, options, contents, tutorials, tips, difficulty, shop, credits headers
+- [x] Rider, form, enemy, support character names; skills, figure effects, special move list (table 43)
+- [x] Character descriptions, figure descriptions, unlock messages, battle cries, story intro (table 27)
+- [ ] Mission dialogue and banners: tables 55-938 (~5,300 lines). Done: 55-61.
+- [ ] Staff names in the credits (table 10) are still Japanese (readings of real names not guessed)
+- [ ] Glossary file (romanized terms, no Japanese)
+- [ ] Review pass on device
 
 ### Phase 5: Images and movies
-- [ ] List UI textures (`.tex`/GXT in `ui/`, `gtc/`) with Japanese text. GXT decode/encode tool
-- [ ] Redraw the important ones (title, menu headers, YES/NO, chapter cards)
-- [ ] Movies: subtitles or leave as they are, depending on what they contain
+- [ ] List UI textures (GXT in `ui/` etc.) with Japanese text. GXT decode/encode tool
+- [ ] Redraw the important ones (boot notice, YES/NO, main menu, mission banners, title)
+- [ ] Movies: story intro narration and chapter movies, check for burned-in text
 
 ### Phase 6: DLC
-- [x] DLC checked: three 0-byte unlock flags (`DLC_CHR_SPC/GSD/CSD.edat`). The characters themselves ship in update 1.02. **No DLC text to translate.**
+- [x] DLC = three 0-byte unlock flags. The characters ship in update 1.02. No DLC text.
 
 ### Phase 7: Release
 - [ ] `scripts/make_release.py`: build, xdelta, round-trip check, zip
 - [ ] Web patcher (`docs/`), README with install steps, screenshots
 - [ ] Optional English game name (`rename_title.py`)
 
-## Open questions for the user
-
-- Climax Fighters PS4 dump: the user will provide it later. Until then the glossary uses common fan names, and it's
-  keyed by hash so names can be swapped in one place.
-
 ## Decisions
 
 - Translation: done by Claude. The user tests on hardware and reports overflowing text.
+- Names: official English romanizations (Kuuga, Den-O, OOO, Gaim...). 必殺技 = "Special Move", 超必殺技 = "Finisher",
+  ライダーソウル = "Rider Souls", タッグパートナー = "tag partner", ボルテージ = "Voltage". Climax Fighters names can
+  replace them later.
+- Climax Fighters PS4 dump: the user will provide it later.

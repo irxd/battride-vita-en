@@ -2,24 +2,137 @@
 
 Usage: python -P tools/build_images.py [--out build/rePatch/PCSG00675] [--preview DIR]
 
-Run after build_text.py: archives already in the output folder are patched further, others are read from the
-game (1.02 first). Only the DXT blocks inside the edited rectangles are re-encoded.
+Archives are always read from the game (1.02 first), so the script can be rerun; build_text.py does not write
+any of these archives. Each edit clears a sprite rectangle and draws the English text into it; only the DXT blocks
+touching edited rectangles are re-encoded. Rectangles come from the SpriteStudio layouts (SSAD part AREAs) or,
+where several sprites share a grid, from the measured glyph rows.
 """
 import argparse
 import sys
+from dataclasses import dataclass, replace
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
-from PIL import Image, ImageChops, ImageDraw, ImageFilter, ImageFont
+from PIL import Image, ImageDraw, ImageFilter, ImageFont
 import fpk
 import gxt
 from build_text import ROOT, game_file
 
 FONTS = Path('C:/Windows/Fonts')
 
-# ---------------------------------------------------------------- mission cut-ins (ui/action.fpk)
-# The objective is one 564x48 strip drawn as two sprites (SSAD 0063): text_L (220,4)-(504,52), then
-# text_R (216,56)-(496,104) of each 512x256 cut-in texture.
+
+# ---------------------------------------------------------------- text rendering
+@dataclass(frozen=True)
+class Style:
+    font: str = 'arialbd.ttf'
+    size: int = 14
+    fill: tuple = (255, 255, 255)          # colour, or (top, bottom) gradient
+    outline: tuple = None                  # colour
+    ow: int = 0                            # outline width
+    glow: tuple = None                     # colour
+    gr: float = 0                          # glow radius
+    glow_alpha: float = 1.0
+    shadow: tuple = None                   # (dx, dy, colour)
+    slant: float = 0.0
+    align: str = 'center'                  # center | left
+    indent: int = 2
+    bg: tuple = None                       # fill the region with this colour instead of clearing it
+    spacing: int = 0                       # extra line spacing for multi-line text
+
+
+def _gradient(size, top, bottom, y0=0.25, y1=0.75):
+    w, h = size
+    g = Image.new('RGBA', size)
+    d = ImageDraw.Draw(g)
+    for y in range(h):
+        k = min(1.0, max(0.0, (y / max(1, h - 1) - y0) / (y1 - y0)))
+        d.line([(0, y), (w, y)], fill=tuple(int(a + (c - a) * k) for a, c in zip(top, bottom)) + (255,))
+    return g
+
+
+def render(text, st):
+    f = ImageFont.truetype(str(FONTS / st.font), st.size)
+    pad = st.ow + int(st.gr * 2) + 4
+    lines = text.split('\n')
+    asc, desc = f.getmetrics()
+    lh = asc + desc + st.spacing
+    widths = [f.getlength(l) for l in lines]
+    w = int(max(widths)) + 2 * pad + int(st.size * st.slant) + 2
+    h = lh * len(lines) + 2 * pad
+    mask = Image.new('L', (w, h))
+    d = ImageDraw.Draw(mask)
+    for i, (line, lw) in enumerate(zip(lines, widths)):
+        x = pad if st.align == 'left' else pad + (max(widths) - lw) / 2
+        d.text((x, pad + i * lh), line, font=f, fill=255)
+    if st.slant:
+        mask = mask.transform(mask.size, Image.AFFINE, (1, st.slant, -st.slant * h / 2, 0, 1, 0), Image.BICUBIC)
+    img = Image.new('RGBA', (w, h))
+    if st.glow:
+        g = mask.filter(ImageFilter.MaxFilter(2 * st.ow + 1)) if st.ow else mask
+        g = g.filter(ImageFilter.GaussianBlur(st.gr)).point(lambda v: min(255, int(v * 2 * st.glow_alpha)))
+        img.paste(st.glow + (255,), (0, 0), g)
+    if st.shadow:
+        dx, dy, col = st.shadow
+        sh = Image.new('L', (w, h))
+        sh.paste(mask, (dx, dy))
+        img.paste(col + (255,), (0, 0), sh)
+    if st.outline and st.ow:
+        img.paste(st.outline + (255,), (0, 0), mask.filter(ImageFilter.MaxFilter(2 * st.ow + 1)))
+    if isinstance(st.fill[0], tuple):
+        top = mask.getbbox() or (0, 0, w, h)
+        grad = Image.new('RGBA', (w, h))
+        grad.paste(_gradient((w, top[3] - top[1]), *st.fill), (0, top[1]))
+        img.paste(grad, (0, 0), mask)
+    else:
+        img.paste(st.fill + (255,), (0, 0), mask)
+    bb = img.getchannel('A').getbbox()
+    return img.crop(bb) if bb else img
+
+
+def place(img, region, text, st, valign=None):
+    """Clear region and draw text into it (squeezed horizontally to fit)."""
+    x0, y0, x1, y1 = region
+    if st.bg:
+        img.paste(st.bg + (255,), region)
+    else:
+        img.paste((0, 0, 0, 0), region)
+    s = render(text, st)
+    maxw, maxh = x1 - x0, y1 - y0
+    if s.width > maxw:
+        s = s.resize((maxw, s.height), Image.LANCZOS)
+    if s.height > maxh:
+        s = s.crop((0, (s.height - maxh) // 2, s.width, (s.height - maxh) // 2 + maxh))
+    x = x0 + st.indent if st.align == 'left' else x0 + (maxw - s.width) // 2
+    x = min(x, x1 - s.width)
+    y = y0 + (maxh - s.height) // 2 if valign is None else y0 + valign
+    layer = Image.new('RGBA', img.size)
+    layer.paste(s, (x, y))
+    img.alpha_composite(layer.crop(region), region[:2])
+
+
+# ---------------------------------------------------------------- styles
+FIRE = Style(font='impact.ttf', size=34, fill=((255, 250, 150), (255, 110, 10)), outline=(120, 10, 0), ow=1,
+             glow=(255, 90, 0), gr=3, glow_alpha=0.85, slant=0.18)
+HEADER = Style(font='arialbi.ttf', size=17, fill=(255, 255, 255), outline=(110, 0, 0), ow=2, glow=(220, 0, 0),
+               gr=2, glow_alpha=0.7, align='left', indent=4)
+MENU_SEL = Style(font='arialbd.ttf', size=14, fill=(255, 255, 255), outline=(110, 0, 0), ow=1, glow=(220, 0, 0),
+                 gr=2, glow_alpha=0.4)
+MENU = Style(font='arialbd.ttf', size=14, fill=(255, 255, 255), shadow=(1, 1, (0, 0, 0)))
+BIG_SEL = replace(MENU_SEL, size=19)
+BIG = replace(MENU, size=19)
+OPTION = Style(font='arialbd.ttf', size=15, fill=((255, 240, 150), (215, 160, 40)), outline=(10, 10, 10), ow=1,
+               align='left', indent=1, slant=0.12)
+ORANGE_TAG = Style(font='arialbd.ttf', size=12, fill=(255, 150, 40), outline=(120, 0, 0), ow=1, glow=(220, 30, 0),
+                   gr=1, glow_alpha=0.6)
+YES_GLOW = Style(font='arialbd.ttf', size=21, fill=(255, 255, 255), glow=(230, 0, 0), gr=2.5, glow_alpha=0.6,
+                 align='left', indent=4)
+YES_RED = Style(font='arialbd.ttf', size=21, fill=(255, 255, 255), outline=(235, 0, 0), ow=1, glow=(255, 0, 0),
+                gr=2.5, glow_alpha=0.35, align='left', indent=4)
+
+
+# ---------------------------------------------------------------- edits
+# mission cut-ins (ui/action.fpk): the objective is one 564x48 strip drawn as two sprites (SSAD 0063): text_L
+# (220,4)-(504,52), then text_R (216,56)-(496,104) of each 512x256 cut-in texture.
 CUTIN_L, CUTIN_R = (220, 4, 504, 52), (216, 56, 496, 104)
 CUTINS = {
     64: 'Race Through the Battlefield and Face G3-X',
@@ -79,64 +192,109 @@ CUTINS = {
 }
 
 
-def fire_text(text, size, height=48, max_width=None, font='impact.ttf', slant=0.18):
-    """Bold italic text with a yellow-orange gradient, dark red outline and orange glow (cut-in style)."""
-    f = ImageFont.truetype(str(FONTS / font), size)
-    pad = 10
-    l, t, r, b = f.getbbox(text)
-    w, h = r - l + 2 * pad + int(size * slant), height
-    mask = Image.new('L', (w, h))
-    ImageDraw.Draw(mask).text((pad - l, (h - (b - t)) // 2 - t), text, font=f, fill=255)
-    # slant (italic)
-    mask = mask.transform(mask.size, Image.AFFINE, (1, slant, -slant * h / 2 - 2, 0, 1, 0), Image.BICUBIC)
-    stroke = mask.filter(ImageFilter.MaxFilter(3))
-    glow = mask.filter(ImageFilter.MaxFilter(5)).filter(ImageFilter.GaussianBlur(3))
-    grad = Image.new('RGBA', (w, h))
-    gd = ImageDraw.Draw(grad)
-    top, bot = (255, 250, 150), (255, 110, 10)
-    for y in range(h):
-        k = min(1.0, max(0.0, (y - h * 0.25) / (h * 0.5)))
-        gd.line([(0, y), (w, y)], fill=tuple(int(a + (c - a) * k) for a, c in zip(top, bot)) + (255,))
-    img = Image.new('RGBA', (w, h))
-    img.paste((255, 90, 0, 255), (0, 0), glow.point(lambda v: int(v * 0.85)))
-    img.paste((120, 10, 0, 255), (0, 0), stroke)
-    img.paste(grad, (0, 0), mask)
-    bbox = img.getchannel('A').getbbox()
-    img = img.crop((bbox[0], 0, bbox[2], h))
-    if max_width and img.width > max_width:
-        img = img.resize((max_width, h), Image.LANCZOS)
-    return img
+def cutin(text):
+    def edit(img):
+        total = (CUTIN_L[2] - CUTIN_L[0]) + (CUTIN_R[2] - CUTIN_R[0])
+        strip = Image.new('RGBA', (total, 48))
+        place(strip, (4, 0, total - 4, 48), text, FIRE)
+        lw = CUTIN_L[2] - CUTIN_L[0]
+        for box, part in ((CUTIN_L, strip.crop((0, 0, lw, 48))), (CUTIN_R, strip.crop((lw, 0, total, 48)))):
+            img.paste((0, 0, 0, 0), box)
+            img.alpha_composite(part, box[:2])
+        return [CUTIN_L, CUTIN_R]
+    return edit
 
 
-def cutin_strip(text):
-    total = (CUTIN_L[2] - CUTIN_L[0]) + (CUTIN_R[2] - CUTIN_R[0])
-    t = fire_text(text, 34, 48, max_width=total - 8)
-    strip = Image.new('RGBA', (total, 48))
-    strip.alpha_composite(t, ((total - t.width) // 2, 0))
-    return strip
+def labels(*items):
+    """items: (region, text, style)"""
+    def edit(img):
+        for region, text, st in items:
+            place(img, region, text, st)
+        return [r for r, _, _ in items]
+    return edit
 
 
-def paste_cutin(img, text):
-    strip = cutin_strip(text)
-    lw = CUTIN_L[2] - CUTIN_L[0]
-    for box, part in ((CUTIN_L, strip.crop((0, 0, lw, 48))), (CUTIN_R, strip.crop((lw, 0, strip.width, 48)))):
-        img.paste((0, 0, 0, 0), box)
-        img.alpha_composite(part, box[:2])
-    return [CUTIN_L, CUTIN_R]
+NOTICE_TITLE = Style(font='arialbd.ttf', size=19, fill=(205, 45, 25), bg=(239, 239, 239))
+NOTICE_BODY = Style(font='arial.ttf', size=14, fill=(70, 70, 70), bg=(239, 239, 239), align='left', indent=0,
+                    spacing=3)
+
+
+def notice(img):
+    place(img, (96, 144, 416, 176), 'Notice', NOTICE_TITLE)
+    place(img, (104, 180, 412, 368),
+          'Distributing this game software over the\n'
+          'internet without permission from the\n'
+          'copyright holder, or knowingly downloading\n'
+          'an illegally distributed copy, is strictly\n'
+          'prohibited by law.\n'
+          '\n'
+          'Thank you for your understanding\n'
+          'and cooperation.', NOTICE_BODY)
+    return [(96, 144, 416, 368)]
+
+
+def grid(x0, y0, w, h, names, st):
+    """names: rows of column texts (None = leave)."""
+    out = []
+    for r, row in enumerate(names):
+        for c, text in enumerate(row):
+            if text:
+                out.append(((x0 + c * w, y0 + r * h, x0 + (c + 1) * w, y0 + (r + 1) * h), text, st))
+    return out
+
+
+PAUSE = [['Bonus Settings', 'Shop'], ['Custom Soundtrack', 'View Cards'], ['Skills', 'Move List'],
+         ['Forms', 'View Skills'], ['Cards', 'Game Settings'], ['Change Figure', 'Buy Voices'], ['Buy BGM', None]]
+
+EDITS = {
+    'nativeVITA/_fpk/ui/action.fpk': {i: cutin(t) for i, t in CUTINS.items()},
+    'nativeVITA/_fpk/ui/title.fpk': {4: notice},
+    'nativeVITA/_fpk/ui/common.fpk': {
+        # yes/no: highlighted (glow) and plain (outline) versions; SSAD 0011 Yes (0,40,60,68), 0010 No (0,112,80,144)
+        16: labels(((0, 0, 64, 36), 'Yes', YES_GLOW), ((0, 36, 64, 72), 'Yes', YES_RED),
+                   ((0, 72, 84, 108), 'No', YES_GLOW), ((0, 108, 84, 146), 'No', YES_RED)),
+        # screen headers: two columns of 144x24 cells (SSAD Mess_1 (0,44,144,68) ...)
+        83: labels(*grid(0, 44, 144, 24, [['Story Mode', 'Sound Gallery'], ['Time Survival', 'Rankings'],
+                                          ['Free Mission', 'Custom Soundtrack'], ['Rider Select', 'Settings'],
+                                          ['Tag Select', 'Move List'], ['Shop', 'Skills']], HEADER),
+                   *grid(0, 212, 144, 24, [['Change Figure', 'Forms'], ['Buy BGM', 'Card Set'],
+                                           ['Buy Voices', 'Pause Menu']], HEADER),
+                   ((0, 308, 144, 334), 'Figure Viewer', HEADER)),
+    },
+    'nativeVITA/_fpk/ui/menu.fpk': {
+        # options menu labels (measured glyph boxes; icons sit right of the first two)
+        369: labels(((0, 0, 100, 22), 'Difficulty', OPTION), ((0, 22, 100, 40), 'Save/Load', OPTION),
+                    ((0, 42, 145, 60), 'Custom Soundtrack', OPTION), ((146, 42, 220, 60), 'Options', OPTION),
+                    ((0, 62, 59, 80), 'Controls', OPTION), ((60, 62, 133, 80), 'Camera', OPTION),
+                    ((134, 62, 216, 80), 'Sound', OPTION),
+                    ((0, 82, 70, 100), 'Game Settings', OPTION), ((71, 82, 144, 100), 'Gallery', OPTION)),
+    },
+    'nativeVITA/_fpk/ui/texture/menu.fpk': {
+        5: labels(((232, 52, 380, 76), 'Quit Mission', BIG_SEL), ((232, 76, 380, 100), 'Quit Mission', BIG),
+                  ((232, 160, 380, 184), 'Start Mission', BIG_SEL), ((232, 184, 380, 208), 'Start Mission', BIG),
+                  ((444, 280, 512, 296), 'Voice/BGM', MENU), ((444, 296, 512, 312), 'Figures', MENU),
+                  ((444, 312, 512, 328), 'All Items', MENU),
+                  ((452, 112, 512, 134), 'Changeable', ORANGE_TAG), ((452, 136, 512, 158), 'New Items', ORANGE_TAG),
+                  *grid(0, 364, 120, 20, PAUSE, MENU_SEL), *grid(242, 364, 120, 20, PAUSE, MENU)),
+    },
+}
 
 
 # ---------------------------------------------------------------- texture patching
 def encode_blocks(img, t, raw, boxes):
     """Re-encode the 4x4 blocks covering boxes; returns new raw (swizzled) texture data."""
     from dxt import encode_dxt5_block, encode_dxt1_block
-    f = gxt.fmt_name(t)
     bw, bh, unit, _ = gxt.layout(t)
     lin = bytearray(gxt.unswizzle(raw, bw, bh, unit))
     px = img.load()
-    enc = encode_dxt5_block if f == 'UBC3' else encode_dxt1_block
+    enc = encode_dxt5_block if gxt.fmt_name(t) == 'UBC3' else encode_dxt1_block
+    done = set()
     for box in boxes:
-        for by in range(box[1] // 4, (box[3] + 3) // 4):
-            for bx in range(box[0] // 4, (box[2] + 3) // 4):
+        for by in range(max(0, box[1] // 4), min(bh, (box[3] + 3) // 4)):
+            for bx in range(max(0, box[0] // 4), min(bw, (box[2] + 3) // 4)):
+                if (bx, by) in done:
+                    continue
+                done.add((bx, by))
                 blk = [px[bx * 4 + i % 4, by * 4 + i // 4] for i in range(16)]
                 lin[(by * bw + bx) * unit:(by * bw + bx + 1) * unit] = enc(blk)
     return gxt.swizzle(lin, bw, bh, unit, len(raw))
@@ -149,9 +307,8 @@ def patch_gxt(data, edit):
     img = gxt.decode(data, t, g)
     boxes = edit(img)
     raw = data[t['off']:t['off'] + t['size']]
-    new = encode_blocks(img, t, raw, boxes)
     out = bytearray(data)
-    out[t['off']:t['off'] + t['size']] = new
+    out[t['off']:t['off'] + t['size']] = encode_blocks(img, t, raw, boxes)
     return bytes(out), img
 
 
@@ -159,19 +316,22 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument('--out', type=Path, default=ROOT / 'build/rePatch/PCSG00675')
     ap.add_argument('--preview', type=Path, help='also save edited textures as PNG here')
+    ap.add_argument('--only', help='only this archive (substring)')
     a = ap.parse_args()
-    rel = 'nativeVITA/_fpk/ui/action.fpk'
-    dst = a.out / rel
-    f = fpk.Fpk((dst if dst.is_file() else game_file(rel)).read_bytes())
-    for i, text in CUTINS.items():
-        data, img = patch_gxt(f.entries[i].content(), lambda im, text=text: paste_cutin(im, text))
-        f.set_content(i, data)
-        if a.preview:
-            a.preview.mkdir(parents=True, exist_ok=True)
-            img.save(a.preview / f'action_{i:04d}.png')
-    dst.parent.mkdir(parents=True, exist_ok=True)
-    dst.write_bytes(f.build())
-    print(f'{rel}: {len(CUTINS)} mission cut-ins')
+    for rel, edits in EDITS.items():
+        if a.only and a.only not in rel:
+            continue
+        dst = a.out / rel
+        f = fpk.Fpk(game_file(rel).read_bytes())
+        for i, edit in edits.items():
+            data, img = patch_gxt(f.entries[i].content(), edit)
+            f.set_content(i, data)
+            if a.preview:
+                a.preview.mkdir(parents=True, exist_ok=True)
+                img.save(a.preview / f"{rel.split('_fpk/')[1].replace('/', '_')[:-4]}_{i:04d}.png")
+        dst.parent.mkdir(parents=True, exist_ok=True)
+        dst.write_bytes(f.build())
+        print(f'{rel}: {len(edits)} textures')
 
 
 if __name__ == '__main__':

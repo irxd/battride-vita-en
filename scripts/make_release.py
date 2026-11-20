@@ -9,7 +9,8 @@ the decrypted game (scripts/decrypt_vita.ps1):
     decrypted/app/PCSG00675/     game 1.00
     decrypted/patch/PCSG00675/   update 1.02 (its files replace the 1.00 ones, so they are the patch sources)
 
-Steps: clean build/rePatch/PCSG00675, run tools/build_text.py build and tools/build_images.py, then make one
+Steps: clean build/rePatch/PCSG00675, run tools/build_text.py build, tools/build_images.py and tools/build_movies.py
+(movie subtitles; needs ffmpeg with h264_nvenc, path from $FFMPEG or the default in build_movies.py), then make one
 xdelta patch per changed file against its 1.02 original (round-trip checked).
 
 Output:
@@ -23,6 +24,7 @@ Output:
 import argparse
 import hashlib
 import json
+import os
 import shutil
 import subprocess
 import sys
@@ -89,6 +91,13 @@ def main():
             shutil.rmtree(BUILD)
         run(sys.executable, '-P', '-X', 'utf8', ROOT / 'tools/build_text.py', 'build', '--out', BUILD)
         run(sys.executable, '-P', ROOT / 'tools/build_images.py', '--out', BUILD)
+        sys.path.insert(0, str(ROOT / 'tools'))
+        from build_movies import FFMPEG
+        ff = os.environ.get('FFMPEG', FFMPEG)
+        if Path(ff).is_file() or shutil.which(ff):
+            run(sys.executable, '-P', ROOT / 'tools/build_movies.py', '--out', BUILD, '--ffmpeg', ff)
+        else:
+            print(f'skipping movie subtitles: ffmpeg not found ({ff}); set FFMPEG=<path to ffmpeg.exe>')
     files = sorted(p for p in BUILD.rglob('*') if p.is_file())
     if not files:
         sys.exit(f'nothing built in {BUILD}')

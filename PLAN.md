@@ -83,7 +83,15 @@ rectangle and draws the English with Windows fonts (Impact, Arial, Times), re-en
 - [x] Portrait name tags (menu 0158-0201), rider name list (menu 0248), HUD counter suffixes removed
 - [ ] Left as is: 6-7 px label atlases no SSAD layout references (menu 0305/0308, result 0306/0307/0308,
       action 0201, common 0014), 秒 in result 0192, stylised finisher kanji in result effects (artwork)
-- [ ] Movies: story intro narration and chapter movies, check for burned-in text
+- [x] Movies (`tools/build_movies.py`, cues in `text/movies/*.json`, no Japanese stored): 31 of 61 movies have
+      burned-in subtitles (none in the string tables). 3 story chapter movies (etc/CHP_*, 'Speaker「line」' on a
+      black bar) and 26 mission movies (small centred text) are re-rendered: each English cue covers the Japanese
+      (black bar / dark rounded box) via ffmpeg overlay, re-encoded with h264_nvenc (Main@3.1, B-frames, GOP 30,
+      ~1 Mbps, moov first, audio copied; h264_mf/amf/qsv fail in the bundled ffmpeg). Opening/Ending have no
+      subtitles. Release impact: the re-encoded movies are ~129 MB, so their xdelta patches are about that size.
+- [ ] Movies: in-game playback of a re-encoded movie not yet seen (Vita3K can't get past the 3D stages)
+- [ ] Intro narration before Story Mode chapter 1 (white text on black, advanced with ○) is still Japanese;
+      it is not in a movie or the string tables
 ### Phase 6: DLC
 - [x] DLC = three 0-byte unlock flags. The characters ship in update 1.02. No DLC text.
 

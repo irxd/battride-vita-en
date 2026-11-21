@@ -6,11 +6,15 @@ A fan English translation patch for **仮面ライダー バトライド・ウ�
 There is no official English release of this game on any platform, so everything is a new translation. Rider,
 form and finisher names follow the official English of *Kamen Rider: Climax Fighters* where possible.
 
-> **Status: v0.1.0, first full translation pass.** Text, menus, story, mission dialogue, battle lines and the main
-> UI images are in English. Not yet reviewed on real hardware: expect some text that overflows its box.
+> **Status: v0.1.1, first full translation pass.** Text, menus, story, mission dialogue, battle lines, UI images
+> and movie subtitles are in English. Tested on a real PS Vita; some text may still overflow its box.
 >
 > **Patch it in your browser with the [web patcher](https://irxd.github.io/battride-vita-en/)** or download the
 > patch files from the [Releases](https://github.com/irxd/battride-vita-en/releases) page. See [Install](#install).
+
+<p align="center"><img src="docs/screenshots/01-main-menu.png" width="420" alt="Main menu in English, on a PS Vita"> <img src="docs/screenshots/02-battle-dialogue.png" width="420" alt="Battle with English dialogue, on a PS Vita"></p>
+
+More screenshots: [Screenshots](#screenshots).
 
 ## What's translated
 
@@ -115,6 +119,16 @@ to `ur0:shell/db/app.db` and restart the Vita.
 - Without the FAGDec `eboot.bin.elf`, the result screen and some messages stay Japanese.
 - Credits staff names are left in Japanese.
 - Made for a real PS Vita only. Emulators are not supported.
+
+## Screenshots
+
+Taken on a real PS Vita (game version 1.02).
+
+<table>
+<tr><td><img src="docs/screenshots/01-main-menu.png" alt="Main menu"><br><sub>Main menu</sub></td><td><img src="docs/screenshots/04-story-scene.png" alt="Story scene"><br><sub>Story scene</sub></td><td><img src="docs/screenshots/08-unlock.png" alt="Unlock message"><br><sub>Unlock message</sub></td></tr>
+<tr><td><img src="docs/screenshots/02-battle-dialogue.png" alt="Battle dialogue"><br><sub>Battle dialogue</sub></td><td><img src="docs/screenshots/03-battle-objective.png" alt="Battle objective and kill counter"><br><sub>Battle objective and kill counter</sub></td><td><img src="docs/screenshots/06-tutorial.png" alt="Tutorial"><br><sub>Tutorial</sub></td></tr>
+<tr><td><img src="docs/screenshots/05-mission-confirm.png" alt="Mission settings and confirmation"><br><sub>Mission settings and confirmation</sub></td><td><img src="docs/screenshots/07-character-intro.png" alt="Character description while loading"><br><sub>Character description while loading</sub></td><td></td></tr>
+</table>
 
 ---
 

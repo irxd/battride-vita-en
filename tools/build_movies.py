@@ -87,7 +87,7 @@ def cue_image(style, cue):
     y = int(min(max(4, cy - h / 2), H - 4 - h))
     img = Image.new('RGBA', (int(w), int(h)))
     ImageDraw.Draw(img).rounded_rectangle((0, 0, img.width - 1, img.height - 1), radius=5,
-                                          fill=(10, 10, 14, 238))
+                                          fill=(10, 10, 14, 255))   # opaque: the Japanese showed through
     img.alpha_composite(t, ((img.width - t.width) // 2, (img.height - t.height) // 2))
     return img, x, y
 

@@ -38,6 +38,9 @@ patches, browser web patcher, optional English home-screen name.
     multi-line strings) also share a line limit.
   - **Mission dialogue box** (string.fpk tables 55+): 2 lines of up to ~340 px (325 used) whatever the Japanese
     line breaks were. Spoken lines wrap to it; one-line banners don't.
+  - Mission descriptions (3+ lines without paragraph breaks, e.g. string.fpk 252/253) keep their own table's box
+    (~260 px): the Free Mission panel is narrower than the briefing box (overflow seen on hardware). Only real
+    briefings (with blank lines) use the 325 px briefing box.
   - The build reports `LINES` (too many lines, must fix) and `WIDE` (one-line label wider than the Japanese; only a
     problem if it overflows on screen).
 - **Not text** (done as images/movies, Phase 5): the boot notice (ご注意), YES/はい buttons, main menu items, mission
@@ -81,6 +84,10 @@ rectangle and draws the English with Windows fonts (Impact, Arial, Times), re-en
 - [x] 54 mission objective cut-ins (action 0064-0117), battle HUD labels (action 0153/0154/0155/0157)
 - [x] 61 rider name plates (menu 0091-0151), ranking record labels (menu 0306)
 - [x] Portrait name tags (menu 0158-0201), rider name list (menu 0248), HUD counter suffixes removed
+- [x] Found on hardware (v0.1.0 test): combo praise words (action 0026: キターッ!/100 COMBO 越え/爆裂!/素晴らしい!/
+      カイガン!, rectangles chosen in code, so English stays in each measured word box), item pickup popups
+      (_fpk/chr/cmn/effect.fpk 0230 health/finisher recovery, 0231 Rider Souls +100/+1000, Figure Obtained),
+      秒 -> s on the result stat panels (result 0192)
 - [ ] Left as is: 6-7 px label atlases no SSAD layout references (menu 0305/0308, result 0306/0307/0308,
       action 0201, common 0014), 秒 in result 0192, stylised finisher kanji in result effects (artwork)
 - [x] Movies (`tools/build_movies.py`, cues in `text/movies/*.json`, no Japanese stored): 29 of 61 movies have
@@ -93,6 +100,17 @@ rectangle and draws the English with Windows fonts (Impact, Arial, Times), re-en
 - [x] Intro narration before Story Mode chapter 1 = movie msn/STR_000_000 (centred lines on black; the subtitle
       scan only looked at the bottom band): 4 cues; the villain's red narration in msn/STR_001_000: 6 cues.
       Ending = staff roll (kept Japanese like the credits table)
+### Phase 5b: Text built into the eboot
+- [x] The result screen labels, 'このミッションを遊びます。よろしいですか？', shop/settings confirmations, custom
+      soundtrack, save/cross-save/DLC messages and some name lists are NUL-terminated UTF-8 in the eboot's rodata,
+      not in any string table. `tools/build_eboot.py` overwrites them in place (English must fit in the original bytes
+      plus NUL padding to the next 4-byte boundary; nothing moves), from `text/eboot.json` (sha1 keys), and writes an
+      fself (`tools/fself.py`, authid from FAGDec's self_auth.bin). Source = FAGDec's 1.02 `eboot.bin.elf`; the
+      release patch is optional for players (web patcher row "Game program", `apply_patches.py` argument).
+- Left Japanese on purpose: the game title (save data), PS3-only install/HDD messages, debug/test strings, and
+  ライダーソウル / を獲得 at 0x64ac78/0x64acb8 (they are memory allocator name tags, not display text).
+- [ ] Hardware check: patched eboot boots via rePatch, result screen and confirm dialog in English
+
 ### Phase 6: DLC
 - [x] DLC = three 0-byte unlock flags. The characters ship in update 1.02. No DLC text.
 

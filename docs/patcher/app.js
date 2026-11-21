@@ -10,7 +10,8 @@ const canPickFolder = 'showDirectoryPicker' in window;
 const mb = (n) => (n < 10485760 ? (n / 1048576).toFixed(1) : Math.round(n / 1048576)) + ' MB';
 const entries = (origin) => state.manifest.files.filter((e) => e.source.origin === origin);
 const foundOf = (origin) => entries(origin).filter((e) => state.found.has(e.patch)).length;
-const missing = () => state.manifest.files.filter((e) => !state.found.has(e.patch));
+// the eboot (FAGDec's eboot.bin.elf) is optional: without it only the text built into the program stays Japanese
+const missing = () => state.manifest.files.filter((e) => e.source.origin !== 'eboot' && !state.found.has(e.patch));
 
 async function init() {
   try {
@@ -24,7 +25,8 @@ async function init() {
   }
   $('[data-slot="app"]').addEventListener('click', () => $('#dir-app').click());
   $('[data-slot="patch"]').addEventListener('click', () => $('#dir-patch').click());
-  for (const id of ['#dir-app', '#dir-patch'])
+  $('[data-slot="eboot"]').addEventListener('click', () => $('#file-eboot').click());
+  for (const id of ['#dir-app', '#dir-patch', '#file-eboot'])
     $(id).addEventListener('change', (e) => { addFiles(e.target.files); e.target.value = ''; });
   $('#title-pick').addEventListener('click', () => $('#title-file').click());
   $('#title-file').addEventListener('change', (e) => { if (e.target.files[0]) renameTitle(e.target.files[0]); e.target.value = ''; });
@@ -100,15 +102,18 @@ async function addFiles(list) {
 }
 
 function render() {
-  for (const origin of ['app', 'patch']) {
+  for (const origin of ['app', 'patch', 'eboot']) {
     const el = $(`[data-slot="${origin}"]`), n = foundOf(origin), total = entries(origin).length;
+    el.hidden = origin === 'eboot' && !total;
     el.classList.toggle('ok', total > 0 && n === total);
     el.disabled = state.busy;
     el.querySelector('small').textContent = !total ? 'Not needed for this version'
+      : origin === 'eboot' ? (n ? 'eboot.bin.elf found' : el.dataset.hint)
       : n ? `${n} of ${total} files found` : el.dataset.hint;
-    el.querySelector('.meta').textContent = n === total && total ? 'Done' : 'Choose folder';
+    el.querySelector('.meta').textContent = n === total && total ? 'Done' : origin === 'eboot' ? 'Choose file' : 'Choose folder';
   }
-  const all = state.manifest.files.length, have = state.found.size;
+  const all = state.manifest.files.filter((e) => e.source.origin !== 'eboot').length + foundOf('eboot');
+  const have = state.found.size;
   const miss = missing();
   const zip = $('#zip').checked;
   const outSize = state.manifest.files.reduce((n, e) => n + e.target.size, 0);

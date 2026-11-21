@@ -1,11 +1,15 @@
 """Apply the English patch on a PC (no other tools needed: Python 3.8+ only).
 
 Usage:
-    python apply_patches.py <decrypted game folder> [<decrypted update folder>] [--out <folder>]
+    python apply_patches.py <decrypted game folder> [<decrypted update folder>] [<eboot.bin.elf>] [--out <folder>]
 
 The folders are the decrypted copies of ux0:app/PCSG00675 (game) and ux0:patch/PCSG00675 (update 1.02), e.g.
 copied from VitaShell's "Open decrypted" over FTP (if the update is already merged into the game folder, one
 folder is enough). Each file is matched by its path and SHA-1, then patched.
+
+Optional: FAGDec's eboot.bin.elf of the 1.02 update (ux0:FAGDec/patch/PCSG00675/eboot.bin.elf) gives the English
+for the text built into the game program (result screen, some confirmation messages). Without it, that text stays
+Japanese and everything else is patched as usual.
 
 Output: <out>/rePatch/PCSG00675/... (default out: the current folder). Copy that rePatch folder to ux0: on the
 Vita (needs the rePatch plugin).
@@ -184,7 +188,8 @@ def sha1(path):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split('\n')[0])
-    ap.add_argument('folders', nargs='+', type=Path, help='decrypted game folder, and the update folder')
+    ap.add_argument('folders', nargs='+', type=Path,
+                    help='decrypted game folder, the update folder, and optionally eboot.bin.elf (FAGDec)')
     ap.add_argument('--out', type=Path, default=Path('.'))
     ap.add_argument('--patches', type=Path, help='folder with manifest.json (default: patches/ next to this script)')
     a = ap.parse_args()
@@ -194,17 +199,28 @@ def main():
     if not pdir:
         sys.exit('patches/manifest.json not found next to this script; use --patches')
     man = json.loads((pdir / 'manifest.json').read_text(encoding='utf-8'))
-    bad = 0
+    bad, skipped_eboot = 0, False
     for i, e in enumerate(man['files'], 1):
         rel, want = e['source']['path'], e['source']['sha1']
         src = None
         for folder in a.folders:
+            if folder.is_file():        # a file given directly (eboot.bin.elf)
+                if (folder.name.lower() == rel.lower() and folder.stat().st_size == e['source']['size']
+                        and sha1(folder) == want):
+                    src = folder
+                    break
+                continue
             for cand in (folder / rel, folder / rel.split('/', 1)[1] if '/' in rel else None):
                 if cand and cand.is_file() and cand.stat().st_size == e['source']['size'] and sha1(cand) == want:
                     src = cand
                     break
             if src:
                 break
+        if not src and e['source']['origin'] == 'eboot':
+            skipped_eboot = True
+            print(f'[{i}/{len(man["files"])}] skipped eboot.bin (optional: add the 1.02 eboot.bin.elf from FAGDec, '
+                  f'SHA-1 {want}, for the English result screen and messages)')
+            continue
         if not src:
             print(f'[{i}/{len(man["files"])}] MISSING {rel} (need the decrypted '
                   f'{"update 1.02" if e["source"]["origin"] == "patch" else "game"} file, SHA-1 {want})')
@@ -226,6 +242,8 @@ def main():
     if bad:
         sys.exit(f'{bad} file(s) not patched, see above')
     print(f'done: copy {a.out / "rePatch"} to ux0: on your Vita')
+    if skipped_eboot:
+        print('(without eboot.bin.elf: the result screen and some messages stay in Japanese)')
 
 
 if __name__ == '__main__':

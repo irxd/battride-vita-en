@@ -32,7 +32,8 @@ You patch files from **your own copy** of the game. No game data is included.
 
 - **The game:** PCSG00675 with the **1.02 update** installed (`ux0:patch/PCSG00675/` exists). The patch is made
   for the 1.02 files.
-- **On the Vita:** HENkaku/Ensō, the **rePatch** plugin and **VitaShell**.
+- **On the Vita:** HENkaku/Ensō, the **rePatch** plugin and **VitaShell**. Recommended: **FAGDec**, for the
+  game program (the result screen and some messages are built into it).
 - **On the PC:** Chrome or Edge for the [web patcher](https://irxd.github.io/battride-vita-en/), or Python for the
   [manual install](#manual-install).
 
@@ -51,11 +52,20 @@ patched files too.
 USB mode gives the still-encrypted files, so use FTP (or copy the folders to another place on the Vita with
 VitaShell first, then over USB).
 
+**Recommended: the game program (eboot) with FAGDec.** Some text (result screen labels, the "Play this mission?"
+question, save and DLC messages) is built into the game program, not the data files. Without this step that text
+stays Japanese; everything else is still patched.
+
+1. Open FAGDec, select the game and press ✕.
+2. Select the **update** eboot, `ux0:patch/PCSG00675/eboot.bin`, and press ✕.
+3. Copy the `eboot.bin.elf` it made (in `ux0:FAGDec/patch/PCSG00675/`) to your PC.
+
 **2. Patch**
 
 1. Open the **[web patcher](https://irxd.github.io/battride-vita-en/)** in Chrome or Edge.
 2. Choose the game folder under **Game folder** and the update folder under **Update 1.02 folder**. Only the
-   files the patch needs are checked; the rest are skipped.
+   files the patch needs are checked; the rest are skipped. If you made `eboot.bin.elf`, choose it under
+   **Game program (eboot)**.
 3. Press **Patch**. You get a `rePatch` folder (or a zip with it). Nothing is uploaded.
 
 **3. Copy to the Vita**
@@ -80,8 +90,10 @@ Your files in `ux0:app` and `ux0:patch` are not changed.
 3. In the unzipped folder, run (with your own paths from step 1 above):
 
    ```
-   python tools\apply_patches.py "C:\path\to\game" "C:\path\to\update" --out out
+   python tools\apply_patches.py "C:\path\to\game" "C:\path\to\update" "C:\path\to\eboot.bin.elf" --out out
    ```
+
+   Leave out the `eboot.bin.elf` path if you don't have it.
 
    It finds each file by its path and checksum, patches it, and writes `out\rePatch\PCSG00675\...`.
    No other tools are needed (the xdelta patches are applied by the script itself; `xdelta3 -d` works too).
@@ -93,13 +105,14 @@ Patch your **original** files again and replace the files in `ux0:rePatch/PCSG00
 
 ### Removing the patch
 
-Delete `ux0:rePatch/PCSG00675/`. If you changed `app.db`, copy your backup back
+Delete `ux0:rePatch/PCSG00675/` (this also removes the patched `eboot.bin`). If you changed `app.db`, copy your backup back
 to `ur0:shell/db/app.db` and restart the Vita.
 
 ## Known issues
 
 - First translation pass: some lines may overflow their text box. Please report them with a screenshot.
-- Some tiny labels (record screen, result screen, portrait name tags) are still Japanese.
+- Some tiny labels (record screen, portrait name tags) are still Japanese.
+- Without the FAGDec `eboot.bin.elf`, the result screen and some messages stay Japanese.
 - Credits staff names are left in Japanese.
 - Made for a real PS Vita only. Emulators are not supported.
 
@@ -121,6 +134,7 @@ See [CLAUDE.md](CLAUDE.md) for the local data layout and [PLAN.md](PLAN.md) for 
 ```
 python -P -X utf8 tools/build_text.py build     # text + font  -> build/rePatch/PCSG00675
 python -P tools/build_images.py                  # UI textures  -> build/rePatch/PCSG00675
+python -P tools/build_eboot.py                   # eboot text (text/eboot.json) -> build/.../eboot.bin
 python -P scripts/make_release.py 0.1.0          # both, then xdelta patches -> release/ and docs/patcher/patches/
 ```
 

@@ -9,9 +9,12 @@ the decrypted game (scripts/decrypt_vita.ps1):
     decrypted/app/PCSG00675/     game 1.00
     decrypted/patch/PCSG00675/   update 1.02 (its files replace the 1.00 ones, so they are the patch sources)
 
-Steps: clean build/rePatch/PCSG00675, run tools/build_text.py build, tools/build_images.py and tools/build_movies.py
-(movie subtitles; needs ffmpeg with h264_nvenc, path from $FFMPEG or the default in build_movies.py), then make one
-xdelta patch per changed file against its 1.02 original (round-trip checked).
+    eboot/patch/PCSG00675/       eboot.bin.elf + self_auth.bin of update 1.02 (FAGDec), for tools/build_eboot.py
+
+Steps: clean build/rePatch/PCSG00675, run tools/build_text.py build, tools/build_images.py, tools/build_eboot.py and
+tools/build_movies.py (movie subtitles; needs ffmpeg with h264_nvenc, path from $FFMPEG or the default in
+build_movies.py), then make one xdelta patch per changed file against its 1.02 original (round-trip checked). The
+eboot patch goes from FAGDec's eboot.bin.elf (origin "eboot") to the fself rePatch loads.
 
 Output:
     release/battride-war-genesis-en-<version>/          patches/ + manifest.json + checksums.txt + tools/
@@ -35,6 +38,7 @@ ROOT = Path(__file__).resolve().parent.parent
 TID = 'PCSG00675'
 BUILD = ROOT / 'build/rePatch' / TID
 ORIG = [('patch', ROOT / 'decrypted/patch' / TID), ('app', ROOT / 'decrypted/app' / TID)]   # 1.02 first
+EBOOT_ELF = ROOT / 'eboot/patch' / TID / 'eboot.bin.elf'     # FAGDec output of the 1.02 eboot
 WEB = ROOT / 'docs/patcher/patches'
 NAME = 'battride-war-genesis-en'
 PLAYER_TOOLS = [ROOT / 'scripts/apply_patches.py', ROOT / 'tools/rename_title.py', ROOT / 'tools/build_sfo.py']
@@ -65,6 +69,8 @@ def find_xdelta():
 
 
 def original(rel):
+    if rel == 'eboot.bin':          # the player gives FAGDec's decrypted ELF, not the encrypted SELF
+        return 'eboot', EBOOT_ELF
     for origin, d in ORIG:
         if (d / rel).is_file():
             return origin, d / rel
@@ -91,6 +97,10 @@ def main():
             shutil.rmtree(BUILD)
         run(sys.executable, '-P', '-X', 'utf8', ROOT / 'tools/build_text.py', 'build', '--out', BUILD)
         run(sys.executable, '-P', ROOT / 'tools/build_images.py', '--out', BUILD)
+        if EBOOT_ELF.is_file():
+            run(sys.executable, '-P', ROOT / 'tools/build_eboot.py', '--elf', EBOOT_ELF, '--out', BUILD)
+        else:
+            print(f'skipping the eboot: {EBOOT_ELF} not found')
         sys.path.insert(0, str(ROOT / 'tools'))
         from build_movies import FFMPEG
         ff = os.environ.get('FFMPEG', FFMPEG)
@@ -128,7 +138,7 @@ def main():
         target = f'rePatch/{TID}/{rel}'
         lines.append(f'{rel}  [{origin}] {src_sha} -> ux0:{target} {dst_sha}')
         manifest.append({'patch': rel + '.xdelta',
-                         'source': {'path': rel, 'origin': origin, 'size': src.stat().st_size, 'sha1': src_sha},
+                         'source': {'path': src.name if origin == 'eboot' else rel, 'origin': origin, 'size': src.stat().st_size, 'sha1': src_sha},
                          'target': {'path': target, 'size': dst.stat().st_size, 'sha1': dst_sha}})
     man = {'version': a.version, 'titleId': TID, 'gameVersion': '1.02', 'files': manifest}
     (out / 'patches/manifest.json').write_text(json.dumps(man, indent=1) + '\n', encoding='utf-8')

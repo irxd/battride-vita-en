@@ -35,6 +35,7 @@
   .row { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 44px; padding: 8px 10px;
          border-radius: 10px; border: 0; background: none; color: var(--text); font: inherit; text-align: left; }
   .row + .row { margin-top: 2px; }
+  [hidden] { display: none !important; }
   button.row, a.row, label.row { cursor: pointer; }
   button.row:hover, a.row:hover, label.row:hover { background: var(--row-hover); }
   .row .label { flex: 1; min-width: 0; }
@@ -109,8 +110,13 @@
       <svg class="st" viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
       <span class="label">Update 1.02 folder<small></small></span><span class="meta">Choose folder</span>
     </button>
+    <button class="row" type="button" data-slot="eboot" data-hint="Optional: eboot.bin.elf of 1.02 from FAGDec (result screen, some messages)" title="FAGDec output of ux0:patch/PCSG00675/eboot.bin, in ux0:FAGDec/patch/PCSG00675/. Without it the result screen and a few messages stay in Japanese.">
+      <svg class="st" viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/></svg>
+      <span class="label">Game program (eboot)<small></small></span><span class="meta">Choose file</span>
+    </button>
     <input id="dir-app" type="file" webkitdirectory multiple hidden>
     <input id="dir-patch" type="file" webkitdirectory multiple hidden>
+    <input id="file-eboot" type="file" accept=".elf" hidden>
     <div class="sep"></div>
     <label class="row" id="zip-row">
       <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M12 4v3M12 9v2M12 13v2"/><rect x="10.5" y="15" width="3" height="3" rx=".5"/></svg>

@@ -353,11 +353,59 @@ RIDER_LIST = [['Kuuga', 'Agito', 'Ryuki', None, 'Stronger', 'Super-1'],
               ['Ibuki', 'Gatack', 'Zeronos'], ['IXA', 'Diend', 'Joker'], ['Eternal', 'Drive', 'Mach'],
               ['Kuuga\n(Yusuke)', 'No. 1', None]]
 
+# combo praise words (ui/action.fpk 0026, 256x256): the game picks each word's rectangle in code (no SSAD), so
+# every English word stays inside the measured box of the Japanese one (glow included)
+def _combo(top, bottom, line, glow):
+    return Style(font='trebucbi.ttf', size=17, smallcaps=0.78, fill=(top, bottom), outline=line, ow=1, glow=glow,
+                 gr=1.5, glow_alpha=0.7)
+
+
+COMBO_GREEN = _combo((240, 255, 245), (120, 245, 180), (0, 95, 40), (0, 150, 60))
+COMBO_LIME = _combo((250, 255, 240), (195, 230, 120), (55, 95, 0), (110, 170, 0))
+COMBO_BLUE = _combo((240, 248, 250), (120, 205, 230), (8, 40, 105), (0, 90, 190))
+COMBO_WORDS = labels(((0, 49, 72, 71), 'Awesome!', COMBO_GREEN), ((73, 49, 166, 71), '100+ combo', COMBO_GREEN),
+                     ((209, 24, 250, 47), 'Burst!', COMBO_LIME), ((155, 71, 230, 95), 'Superb!', COMBO_LIME),
+                     ((99, 143, 161, 167), 'Kaigan!', COMBO_BLUE))
+
+
+# item pickup popups over the player (_fpk/chr/cmn/effect.fpk): one billboard per row, text centred
+def _pop(size, top, bottom, line, ow):
+    return Style(font='arialbd.ttf', size=size, fill=(top, bottom), outline=line, ow=ow)
+
+
+POP_BLUE = _pop(24, (150, 240, 255), (30, 140, 240), (8, 40, 110), 2)
+POP_ORANGE = _pop(24, (255, 195, 70), (235, 100, 0), (70, 15, 0), 2)
+POP_GOLD = _pop(24, (255, 255, 160), (185, 135, 25), (30, 15, 0), 2)
+POP_RED = _pop(48, (255, 215, 230), (200, 25, 35), (105, 0, 0), 4)
+POP_GREEN = _pop(48, (210, 255, 215), (20, 190, 50), (0, 80, 10), 4)
+RECOVERY = labels(((75, 0, 181, 31), 'Health Up', POP_BLUE), ((66, 31, 190, 63), 'Health Up II', POP_BLUE),
+                  ((44, 63, 211, 95), 'Health MAX', POP_BLUE), ((63, 95, 192, 127), 'Finisher Up', POP_ORANGE),
+                  ((32, 127, 223, 159), 'Finisher MAX', POP_ORANGE),
+                  ((40, 159, 216, 191), 'Health & Finisher Up', POP_GOLD))
+PICKUPS = labels(((19, 0, 500, 61), 'Rider Souls +100', POP_RED), ((4, 63, 510, 126), 'Rider Souls +1000', POP_RED),
+                 ((85, 128, 430, 191), 'Figure Obtained!', POP_GREEN))
+
+
+def seconds(img):
+    """Result stat panels (ui/result.fpk 0192): 秒 after the SP value -> 's'. The glyph sits on the opaque panel,
+    so the background is copied from just left of it before drawing."""
+    boxes = [(112, 137, 122, 149), (240, 137, 250, 149), (368, 137, 378, 149), (481, 346, 492, 357)]
+    st = Style(font='arialbd.ttf', size=11, fill=(235, 235, 235))
+    for x0, y0, x1, y1 in boxes:
+        w = x1 - x0
+        img.paste(img.crop((x0 - w, y0, x0, y1)), (x0, y0))
+        s = render('s', st)
+        img.alpha_composite(s, (x0 + (w - s.width) // 2, y1 - 2 - s.height))
+    return boxes
+
+
 PAUSE = [['Bonus Settings', 'Shop'], ['Custom Soundtrack', 'View Cards'], ['Skills', 'Move List'],
          ['Forms', 'View Skills'], ['Cards', 'Game Settings'], ['Change Figure', 'Buy Voices'], ['Buy BGM', None]]
 
 EDITS = {
-    'nativeVITA/_fpk/ui/action.fpk': {**{i: cutin(t) for i, t in CUTINS.items()}, **HUD_EDITS},
+    'nativeVITA/_fpk/ui/action.fpk': {**{i: cutin(t) for i, t in CUTINS.items()}, **HUD_EDITS, 26: COMBO_WORDS},
+    'nativeVITA/_fpk/chr/cmn/effect.fpk': {230: RECOVERY, 231: PICKUPS},
+    'nativeVITA/_fpk/ui/result.fpk': {192: seconds},
     'nativeVITA/_fpk/ui/title.fpk': {4: notice},
     'nativeVITA/_fpk/ui/common.fpk': {
         # yes/no: highlighted (glow) and plain (outline) versions; SSAD 0011 Yes (0,40,60,68), 0010 No (0,112,80,144)

@@ -474,6 +474,9 @@ EDITS = {
                     ((0, 82, 70, 100), 'Game Settings', OPTION), ((71, 82, 144, 100), 'Gallery', OPTION)),
     },
     'nativeVITA/_fpk/ui/texture/menu.fpk': {
+        # 秒 after the SP value on the mission settings parameter panel (SSAD menu/0003 P_Text)
+        4: labels(((24, 376, 48, 388), 's', Style(font='arialbd.ttf', size=11, fill=(235, 235, 235), align='left',
+                                                   indent=2))),
         5: labels(((232, 52, 380, 76), 'Quit Mission', BIG_SEL), ((232, 76, 380, 100), 'Quit Mission', BIG),
                   ((232, 160, 380, 184), 'Start Mission', BIG_SEL), ((232, 184, 380, 208), 'Start Mission', BIG),
                   ((444, 280, 512, 296), 'Voice/BGM', MENU), ((444, 296, 512, 312), 'Figures', MENU),

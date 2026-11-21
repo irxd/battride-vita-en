@@ -71,9 +71,11 @@ def _gradient(size, top, bottom, y0=0.25, y1=0.75):
     return g
 
 
-def render(text, st):
+def render(text, st, pad=None, crop=True):
+    """Text image cropped to its pixels; crop=False keeps the full canvas (same glyph positions for any style
+    with the same text, font, size and slant when the same pad is given)."""
     f = ImageFont.truetype(str(FONTS / st.font), st.size)
-    pad = max(st.ow, st.ow2) + int(st.gr * 2) + 4
+    pad = pad if pad is not None else max(st.ow, st.ow2) + int(st.gr * 2) + 4
     lines = [_runs(l, st) for l in text.split('\n')]
     asc, desc = f.getmetrics()
     lh = asc + desc + st.spacing
@@ -111,7 +113,7 @@ def render(text, st):
     else:
         img.paste(st.fill + (255,), (0, 0), mask)
     bb = img.getchannel('A').getbbox()
-    return img.crop(bb) if bb else img
+    return img.crop(bb) if bb and crop else img
 
 
 def place(img, region, text, st, valign=None):
@@ -234,6 +236,40 @@ def cutin(text):
     return edit
 
 
+def layers(text, *items):
+    """One text drawn in several styles that the game overlays (e.g. a plain and a glowing 'Defeated!'): every
+    variant gets the same glyph positions and the same scale, so the layers line up exactly on screen.
+    items: (region, style); all regions have the same size."""
+    def edit(img):
+        styles = [st for _, st in items]
+        pad = max(max(st.ow, st.ow2) + int(st.gr * 2) + 4 for st in styles)
+        full = [render(text, st, pad, crop=False) for st in styles]
+        x0 = min(f.getchannel('A').getbbox()[0] for f in full)
+        y0 = min(f.getchannel('A').getbbox()[1] for f in full)
+        x1 = max(f.getchannel('A').getbbox()[2] for f in full)
+        y1 = max(f.getchannel('A').getbbox()[3] for f in full)
+        r = items[0][0]
+        maxw, maxh = r[2] - r[0], r[3] - r[1]
+        w, h = x1 - x0, y1 - y0
+        k = min(1.0, maxh / h)
+        kx = min(k, maxw / w)
+        if kx < k * MIN_SQUEEZE:            # too long: shrink uniformly, then squeeze
+            k = kx / MIN_SQUEEZE
+        size = (max(1, round(w * kx)), max(1, round(h * k)))
+        for (region, _), f in zip(items, full):
+            s = f.crop((x0, y0, x1, y1)).resize(size, Image.LANCZOS)
+            img.paste((0, 0, 0, 0), region)
+            img.alpha_composite(s, (region[0] + (maxw - size[0]) // 2, region[1] + (maxh - size[1]) // 2))
+        return [r for r, _ in items]
+    return edit
+
+
+def combine(*edits):
+    def edit(img):
+        return [b for e in edits for b in e(img)]
+    return edit
+
+
 def labels(*items):
     """items: (region, text, style)"""
     def edit(img):
@@ -303,10 +339,11 @@ SKILL_OFF = replace(SKILL, fill=(125, 125, 125), outline=(35, 35, 35))
 HUD_ROWS = ['Side Basshaa', 'Riders Defeated', 'Transcend!', 'Crimson Gauge', 'Beast Magic', 'Mirror World Gate',
             'Collecting Cell Medals', 'Key Item', 'Restricted']
 HUD_EDITS = {
-    153: labels(((0, 0, 134, 50), 'Defeated!', KO_BIG), ((0, 50, 134, 100), 'Defeated!', KO_GOLD)),
-    154: labels(((0, 112, 118, 160), 'Clear!', CLEAR_RED), ((0, 162, 118, 210), 'Clear!', KO_GOLD),
-                ((176, 188, 206, 206), 'Now', HUD_GOLD), ((144, 210, 206, 231), 'to go!!', HUD_GOLD),
-                ((144, 232, 206, 255), 'down!', HUD_GOLD)),
+    # the plain and the glowing version are drawn on top of each other: they must line up (layers)
+    153: layers('Defeated!', ((0, 0, 134, 50), KO_BIG), ((0, 50, 134, 100), KO_GOLD)),
+    154: combine(layers('Clear!', ((0, 112, 118, 160), CLEAR_RED), ((0, 162, 118, 210), replace(KO_GOLD, size=38))),
+                 labels(((176, 188, 206, 206), 'Now', HUD_GOLD), ((144, 210, 206, 231), 'to go!!', HUD_GOLD),
+                        ((144, 232, 206, 255), 'down!', HUD_GOLD))),
     155: labels(*grid(0, 276, 116, 20, [[t] for t in HUD_ROWS], HUD),
                 ((200, 224, 236, 244), 'Now', HUD), ((200, 244, 236, 264), 'Left', HUD),
                 ((216, 60, 236, 77), '', HUD), ((236, 60, 256, 77), '', HUD),     # counter suffixes 枚 / 体

@@ -48,7 +48,7 @@ def archives():
 def load_translations():
     tr, where = {}, {}
     for p in sorted((ROOT / 'text').rglob('*.json')):
-        if 'movies' in p.parts:       # movie subtitle cues (tools/build_movies.py), not string translations
+        if 'movies' in p.parts or p.name == 'eboot.json':   # movie cues / eboot strings (build_movies/build_eboot)
             continue
         for k, v in json.loads(p.read_text(encoding='utf8')).items():
             if k in tr and tr[k] != v:
@@ -124,11 +124,12 @@ class Builder:
         elif dialog and SPOKEN.search(jp) and len(jp_lines) <= DIALOG_LINES:
             # mission dialogue box (verified in Vita3K): 2 lines of up to ~340 px, whatever the Japanese used
             limit, max_lines = max(limit, DIALOG_WIDTH), DIALOG_LINES
-        elif dialog and len(jp_lines) > DIALOG_LINES and self.brief:
-            # mission briefings share one box: as wide and tall as the largest Japanese briefing
+        elif dialog and len(jp_lines) > DIALOG_LINES and self.brief and '\n\n' in jp:
+            # mission briefings (paragraphs) share one box: as wide and tall as the largest Japanese briefing.
+            # Other 3+ line texts (mission descriptions, e.g. the Free Mission panel) keep their table's box: the
+            # Free Mission description panel is narrower than the briefing box (seen on hardware).
             limit = max(limit, self.brief[0])
-            if '\n\n' in jp:      # only real briefings (paragraphs); other 3+ line texts keep their line count
-                max_lines = max(max_lines, self.brief[1])
+            max_lines = max(max_lines, self.brief[1])
         if len(jp_lines) > 1 or max_lines > 1:
             en = wrap(en, limit, self.fnt)   # keeps the translation's own line breaks, adds more where too wide
         en_lines = en.split('\n')

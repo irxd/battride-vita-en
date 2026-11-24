@@ -2,8 +2,8 @@
  "style": "msn",
  "cues": [
   {
-   "start": 0.2,
-   "end": 7.4,
+   "start": 0.233,
+   "end": 7.167,
    "en": "...Then if running out of here right now\nmeans I can save everyone!",
    "box": [
     265,
@@ -13,8 +13,8 @@
    ]
   },
   {
-   "start": 7.5,
-   "end": 9.9,
+   "start": 7.567,
+   "end": 9.7,
    "en": "I'm done thinking!",
    "box": [
     302,
@@ -24,8 +24,19 @@
    ]
   },
   {
-   "start": 18.7,
-   "end": 21.2,
+   "start": 11.8,
+   "end": 15.1,
+   "en": "Drive! Type: Speed!",
+   "box": [
+    294,
+    350,
+    422,
+    362
+   ]
+  },
+  {
+   "start": 18.8,
+   "end": 21.033,
    "en": "What? Who are you?",
    "box": [
     352,
@@ -36,7 +47,7 @@
   },
   {
    "start": 21.3,
-   "end": 25.4,
+   "end": 25.2,
    "en": "Sorry, but I don't know either. This is my first ride.",
    "box": [
     263,
@@ -46,8 +57,8 @@
    ]
   },
   {
-   "start": 25.7,
-   "end": 28.2,
+   "start": 26.133,
+   "end": 27.7,
    "en": "Monsters!",
    "box": [
     337,
@@ -57,8 +68,8 @@
    ]
   },
   {
-   "start": 29.733,
-   "end": 30.4,
+   "start": 28.3,
+   "end": 30.233,
    "en": "Come along for a ride!",
    "box": [
     303,

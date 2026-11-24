@@ -3,7 +3,7 @@
  "cues": [
   {
    "start": 5.7,
-   "end": 12.3,
+   "end": 12.133,
    "en": "Hahaha, Takeshi Hongo!\nWelcome to our Shocker!",
    "box": [
     265,
@@ -13,8 +13,8 @@
    ]
   },
   {
-   "start": 12.3,
-   "end": 15.8,
+   "start": 12.267,
+   "end": 15.767,
    "en": "Where am I?\nLet me go...",
    "box": [
     305,
@@ -24,8 +24,8 @@
    ]
   },
   {
-   "start": 15.8,
-   "end": 20.3,
+   "start": 15.833,
+   "end": 20.267,
    "en": "Hahahaha, your body has been remodeled,",
    "box": [
     265,
@@ -35,8 +35,8 @@
    ]
   },
   {
-   "start": 20.3,
-   "end": 26.3,
+   "start": 20.267,
+   "end": 26.1,
    "en": "and as a cyborg, you are now\none of us, a member of Shocker.",
    "box": [
     275,
@@ -46,7 +46,7 @@
    ]
   },
   {
-   "start": 28.2,
+   "start": 26.267,
    "end": 29.267,
    "en": "A cy...borg...",
    "box": [
@@ -58,7 +58,7 @@
   },
   {
    "start": 30.167,
-   "end": 33.1,
+   "end": 32.933,
    "en": "What's going on?\nA blackout? What is it?",
    "box": [
     317,
@@ -69,7 +69,7 @@
   },
   {
    "start": 34.167,
-   "end": 36.2,
+   "end": 36.0,
    "en": "Someone has destroyed the generator!",
    "box": [
     280,
@@ -79,8 +79,8 @@
    ]
   },
   {
-   "start": 36.3,
-   "end": 37.5,
+   "start": 36.0,
+   "end": 37.467,
    "en": "What?",
    "box": [
     336,

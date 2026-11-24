@@ -3,7 +3,7 @@
  "cues": [
   {
    "start": 6.7,
-   "end": 14.6,
+   "end": 14.633,
    "en": "Curse you... For me to...\nFor me, now the Creation King, to lose...!!",
    "box": [
     235,
@@ -13,8 +13,8 @@
    ]
   },
   {
-   "start": 14.7,
-   "end": 17.3,
+   "start": 15.2,
+   "end": 17.2,
    "en": "Everyone, let's go!!",
    "box": [
     326,
@@ -24,8 +24,8 @@
    ]
   },
   {
-   "start": 17.4,
-   "end": 19.1,
+   "start": 17.2,
+   "end": 19.133,
    "en": "Toooh!",
    "box": [
     326,
@@ -36,7 +36,7 @@
   },
   {
    "start": 20.2,
-   "end": 24.4,
+   "end": 23.633,
    "en": "I'm a Kamen Rider, the same as them!!",
    "box": [
     271,
@@ -47,7 +47,7 @@
   },
   {
    "start": 31.7,
-   "end": 35.7,
+   "end": 35.467,
    "en": "Even with this power...!",
    "box": [
     302,
@@ -57,8 +57,19 @@
    ]
   },
   {
-   "start": 39.0,
-   "end": 39.5,
+   "start": 36.2,
+   "end": 38.533,
+   "en": "Haah!",
+   "box": [
+    339,
+    351,
+    377,
+    362
+   ]
+  },
+  {
+   "start": 38.533,
+   "end": 40.3,
    "en": "Deaaaaah!",
    "box": [
     323,

@@ -2,83 +2,83 @@
  "style": "bar",
  "cues": [
   {
-   "start": 3.4,
-   "end": 4.6,
+   "start": 2.633,
+   "end": 5.4,
    "en": "OOO: \"We\"...?"
   },
   {
-   "start": 6.9,
-   "end": 8.1,
+   "start": 6.133,
+   "end": 8.933,
    "en": "Deneb: Yuto and me, the two of us!"
   },
   {
-   "start": 10.5,
-   "end": 13.6,
+   "start": 9.7,
+   "end": 14.4,
    "en": "Zeronos: Idiot, like the two of us could handle that!"
   },
   {
-   "start": 15.4,
-   "end": 16.6,
+   "start": 14.667,
+   "end": 17.4,
    "en": "Zeronos: When I said \"we\"..."
   },
   {
-   "start": 18.9,
-   "end": 21.1,
+   "start": 18.133,
+   "end": 21.933,
    "en": "Birth: He means us. The fighting doctor, Akira Date, has arrived!"
   },
   {
-   "start": 23.4,
-   "end": 24.6,
+   "start": 22.633,
+   "end": 25.4,
    "en": "OOO: Mr. Date!!"
   },
   {
-   "start": 27.0,
-   "end": 29.1,
+   "start": 26.167,
+   "end": 29.933,
    "en": "Zangetsu Shin: Kouta Kazuraba, leave this to us!"
   },
   {
-   "start": 31.4,
-   "end": 32.6,
+   "start": 30.633,
+   "end": 33.433,
    "en": "Gaim: Takatora!"
   },
   {
-   "start": 35.0,
-   "end": 38.1,
+   "start": 34.167,
+   "end": 38.933,
    "en": "W (Shotaro): Terui... why are you all here...?"
   },
   {
-   "start": 40.4,
-   "end": 41.6,
+   "start": 39.633,
+   "end": 42.4,
    "en": "Accel: Don't question me!!"
   },
   {
-   "start": 44.0,
-   "end": 45.1,
+   "start": 43.167,
+   "end": 45.933,
    "en": "Knight: Call us a separate unit."
   },
   {
-   "start": 47.0,
-   "end": 49.1,
+   "start": 46.167,
+   "end": 49.933,
    "en": "Knight: Didn't you hear? From that weird red oni?"
   },
   {
-   "start": 51.4,
-   "end": 53.6,
+   "start": 50.667,
+   "end": 54.4,
    "en": "Momotaros: Who're you calling a weird red oni!!"
   },
   {
-   "start": 55.9,
-   "end": 58.1,
+   "start": 55.167,
+   "end": 58.933,
    "en": "G3-X: Anyway, leave this to us and go."
   },
   {
-   "start": 60.0,
-   "end": 63.1,
+   "start": 59.167,
+   "end": 63.933,
    "en": "Momotaros: ...Fine! You lot, get on board, quick! We're going!!"
   },
   {
-   "start": 71.9,
-   "end": 75.1,
+   "start": 71.167,
+   "end": 75.933,
    "en": "Shadow Moon: Curse you... all of you! I won't forgive youuuu!!!"
   }
  ]

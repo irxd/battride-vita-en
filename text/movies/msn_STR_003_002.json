@@ -1,0 +1,16 @@
+{
+ "style": "msn",
+ "cues": [
+  {
+   "start": 3.533,
+   "end": 5.567,
+   "en": "Time to get serious.",
+   "box": [
+    320,
+    350,
+    393,
+    362
+   ]
+  }
+ ]
+}

@@ -90,13 +90,19 @@ rectangle and draws the English with Windows fonts (Impact, Arial, Times), re-en
       秒 -> s on the result stat panels (result 0192)
 - [ ] Left as is: 6-7 px label atlases no SSAD layout references (menu 0305/0308, result 0306/0307/0308,
       action 0201, common 0014), 秒 in result 0192, stylised finisher kanji in result effects (artwork)
-- [x] Movies (`tools/build_movies.py`, cues in `text/movies/*.json`, no Japanese stored): 29 of 61 movies have
+- [x] Movies (`tools/build_movies.py`, cues in `text/movies/*.json`, no Japanese stored): 33 of 61 movies have
       burned-in subtitles (none in the string tables). 3 story chapter movies (etc/CHP_*, 'Speaker「line」' on a
-      black bar) and 26 mission movies (small centred text) are re-rendered: each English cue covers the Japanese
+      black bar) and 30 mission movies (small centred text) are re-rendered: each English cue covers the Japanese
       (black bar / dark rounded box) via ffmpeg overlay, re-encoded with h264_nvenc (Main@3.1, B-frames, GOP 30,
       ~1 Mbps, moov first, audio copied; h264_mf/amf/qsv fail in the bundled ffmpeg). Opening/Ending have no
       subtitles. Release impact: the re-encoded movies are ~129 MB, so their xdelta patches are about that size.
-- [ ] Movies: in-game playback of a re-encoded movie not yet seen (Vita3K can't get past the 3D stages)
+- [x] Movies play in-game on the Vita (v0.1.1 test). That test showed Japanese around the English: the first cue pass
+      sampled at 10 fps and missed lines over bright or busy backgrounds, and the bar lines fade in/out over ~0.9 s
+      that the cues did not cover. Cue times are now frame-exact (30 fps): a line is on screen while its glyph pixels
+      (bright, dark outline, same mask in most of the line's frames) are brighter than their 1-px ring; this holds on
+      any background and catches the fades. 12 missed lines added (BAT_028/040, MIN_003/005/007/009/011/015,
+      STR_003_002, STR_004_002). msn/STR_000_000 and STR_001_000 (narration lines that build up) keep their
+      hand-made times.
 - [x] Intro narration before Story Mode chapter 1 = movie msn/STR_000_000 (centred lines on black; the subtitle
       scan only looked at the bottom band): 4 cues; the villain's red narration in msn/STR_001_000: 6 cues.
       Ending = staff roll (kept Japanese like the credits table)

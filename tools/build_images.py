@@ -264,6 +264,52 @@ def layers(text, *items):
     return edit
 
 
+def sliced(chunks, gaps, *items):
+    """Like layers(), for a word the game draws as one sprite per Japanese character (撃|破|!): the sprite edges
+    sample their neighbour column, so any ink on a slice edge shows as a see-through line on screen. The English
+    is split into chunks, one per slice, and every column in gaps ((x0, x1), region-relative, the empty columns
+    between the original glyphs) stays transparent. Chunks share one scale and baseline; a chunk may be ''."""
+    def edit(img):
+        styles = [st for _, st in items]
+        pad = max(max(st.ow, st.ow2) + int(st.gr * 2) + 4 for st in styles)
+        r = items[0][0]
+        maxw, maxh = r[2] - r[0], r[3] - r[1]
+        bounds = [0] + [x for g in gaps for x in g] + [maxw]
+        slots = [(bounds[i], bounds[i + 1]) for i in range(0, len(bounds), 2)]
+        full = [[render(c, st, pad, crop=False) if c else None for st in styles] for c in chunks]
+        ys = [f.getchannel('A').getbbox() for fs in full for f in fs if f]
+        y0, y1 = min(b[1] for b in ys), max(b[3] for b in ys)
+
+        def solid(f):           # letters and outline, not the soft glow (cut at the slice edges below)
+            return f.getchannel('A').point(lambda v: 255 if v > 160 else 0).getbbox()
+        xb = [(min(solid(f)[0] for f in fs), max(solid(f)[2] for f in fs)) if fs[0] else None for fs in full]
+        k = min(1.0, maxh / (y1 - y0))
+        kx = min([k] + [(s1 - s0) / (b[1] - b[0]) for (s0, s1), b in zip(slots, xb) if b])
+        if kx < k * MIN_SQUEEZE:
+            k = kx / MIN_SQUEEZE
+        h = max(1, round((y1 - y0) * k))
+        ws = [max(1, round((b[1] - b[0]) * kx)) if b else 0 for b in xb]
+        # first chunk against its right edge, last against its left edge, middle ones centred: tight spacing
+        xs = []
+        for i, ((s0, s1), w) in enumerate(zip(slots, ws)):
+            if i == 0 and len(slots) > 1:
+                xs.append(s1 - w)
+            elif i == len(slots) - 1 or not ws[i + 1]:
+                xs.append(s0)
+            else:
+                xs.append(s0 + (s1 - s0 - w) // 2)
+        for j, (region, _) in enumerate(items):
+            img.paste((0, 0, 0, 0), region)
+            for fs, b, w, x in zip(full, xb, ws, xs):
+                if b:
+                    s = fs[j].crop((b[0], y0, b[1], y1)).resize((w, h), Image.LANCZOS)
+                    img.alpha_composite(s, (region[0] + x, region[1] + (maxh - h) // 2))
+            for g0, g1 in gaps:
+                img.paste((0, 0, 0, 0), (region[0] + g0, region[1], region[0] + g1, region[3]))
+        return [r for r, _ in items]
+    return edit
+
+
 def combine(*edits):
     def edit(img):
         return [b for e in edits for b in e(img)]
@@ -340,7 +386,9 @@ HUD_ROWS = ['Side Basshaa', 'Riders Defeated', 'Transcend!', 'Crimson Gauge', 'B
             'Collecting Cell Medals', 'Key Item', 'Restricted']
 HUD_EDITS = {
     # the plain and the glowing version are drawn on top of each other: they must line up (layers)
-    153: layers('Defeated!', ((0, 0, 134, 50), KO_BIG), ((0, 50, 134, 100), KO_GOLD)),
+    # 撃|破|! is three sprites (SSAD action/0135 tex_conp01-03 / tex_conp_eff01-03: x 0-56, 56-112, 112-136)
+    153: sliced(('Defe', 'ated', '!'), ((55, 57), (111, 113)),
+                ((0, 0, 136, 50), KO_BIG), ((0, 50, 136, 100), KO_GOLD)),
     154: combine(layers('Clear!', ((0, 112, 118, 160), CLEAR_RED), ((0, 162, 118, 210), replace(KO_GOLD, size=38))),
                  labels(((176, 188, 206, 206), 'Now', HUD_GOLD), ((144, 210, 206, 231), 'to go!!', HUD_GOLD),
                         ((144, 232, 206, 255), 'down!', HUD_GOLD))),

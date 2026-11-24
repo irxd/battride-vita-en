@@ -264,48 +264,51 @@ def layers(text, *items):
     return edit
 
 
-def sliced(chunks, gaps, *items):
-    """Like layers(), for a word the game draws as one sprite per Japanese character (撃|破|!): the sprite edges
-    sample their neighbour column, so any ink on a slice edge shows as a see-through line on screen. The English
-    is split into chunks, one per slice, and every column in gaps ((x0, x1), region-relative, the empty columns
-    between the original glyphs) stays transparent. Chunks share one scale and baseline; a chunk may be ''."""
+def sliced(text, cuts, edges, *items):
+    """Like layers(), for a word the game draws as one sprite per Japanese character, side by side (撃|破|!). The
+    English is one continuous word, scaled and placed so that each slice edge (edges, region-relative x) falls
+    between two letters (cuts: index into text), measured at mid-height so slanted letters still overhang each
+    other. A cut through a letter shows as a thin seam on screen; between letters it doesn't, and chunk-by-chunk
+    layout leaves a wedge-shaped gap next to slanted letters."""
     def edit(img):
         styles = [st for _, st in items]
         pad = max(max(st.ow, st.ow2) + int(st.gr * 2) + 4 for st in styles)
         r = items[0][0]
         maxw, maxh = r[2] - r[0], r[3] - r[1]
-        bounds = [0] + [x for g in gaps for x in g] + [maxw]
-        slots = [(bounds[i], bounds[i + 1]) for i in range(0, len(bounds), 2)]
-        full = [[render(c, st, pad, crop=False) if c else None for st in styles] for c in chunks]
-        ys = [f.getchannel('A').getbbox() for fs in full for f in fs if f]
-        y0, y1 = min(b[1] for b in ys), max(b[3] for b in ys)
+        full = [render(text, st, pad, crop=False) for st in styles]
+        bbs = [f.getchannel('A').getbbox() for f in full]
+        y0, y1 = min(b[1] for b in bbs), max(b[3] for b in bbs)
+        st = styles[0]
+        font = ImageFont.truetype(str(FONTS / st.font), st.size)
+        h_canvas = full[0].height
+        ink = full[0].getchannel('A').point(lambda v: 255 if v > 160 else 0).getbbox()
+        ym = (ink[1] + ink[3]) / 2
 
-        def solid(f):           # letters and outline, not the soft glow (cut at the slice edges below)
-            return f.getchannel('A').point(lambda v: 255 if v > 160 else 0).getbbox()
-        xb = [(min(solid(f)[0] for f in fs), max(solid(f)[2] for f in fs)) if fs[0] else None for fs in full]
+        def boundary(i):    # x between text[i-1] and text[i] at mid-height, after the slant
+            return pad + font.getlength(text[:i]) - st.slant * (ym - h_canvas / 2)
+        bx = [boundary(i) for i in cuts]
+        xl, xr = min(b[0] for b in bbs), max(b[2] for b in bbs)
+        # one horizontal scale per slice: [ink left, cut 1] -> [0, edge 1], [cut i, cut i+1] -> [edge i, edge i+1],
+        # [last cut, ink right] -> [last edge, ...] (at most the middle scale, within the region)
+        src = [xl] + bx + [xr]
+        dst = [0] + list(edges) + [maxw]
+        kxs = [(dst[i + 1] - dst[i]) / (src[i + 1] - src[i]) for i in range(len(src) - 1)]
+        mid = min(kxs[1:-1]) if len(kxs) > 2 else min(kxs)
+        kxs[-1] = min(kxs[-1], mid)
         k = min(1.0, maxh / (y1 - y0))
-        kx = min([k] + [(s1 - s0) / (b[1] - b[0]) for (s0, s1), b in zip(slots, xb) if b])
-        if kx < k * MIN_SQUEEZE:
-            k = kx / MIN_SQUEEZE
+        if min(kxs) < k * MIN_SQUEEZE:
+            k = min(kxs) / MIN_SQUEEZE
         h = max(1, round((y1 - y0) * k))
-        ws = [max(1, round((b[1] - b[0]) * kx)) if b else 0 for b in xb]
-        # first chunk against its right edge, last against its left edge, middle ones centred: tight spacing
-        xs = []
-        for i, ((s0, s1), w) in enumerate(zip(slots, ws)):
-            if i == 0 and len(slots) > 1:
-                xs.append(s1 - w)
-            elif i == len(slots) - 1 or not ws[i + 1]:
-                xs.append(s0)
-            else:
-                xs.append(s0 + (s1 - s0 - w) // 2)
-        for j, (region, _) in enumerate(items):
+        for (region, _), f in zip(items, full):
             img.paste((0, 0, 0, 0), region)
-            for fs, b, w, x in zip(full, xb, ws, xs):
-                if b:
-                    s = fs[j].crop((b[0], y0, b[1], y1)).resize((w, h), Image.LANCZOS)
-                    img.alpha_composite(s, (region[0] + x, region[1] + (maxh - h) // 2))
-            for g0, g1 in gaps:
-                img.paste((0, 0, 0, 0), (region[0] + g0, region[1], region[0] + g1, region[3]))
+            band = f.crop((0, y0, f.width, y1))
+            for i, kx in enumerate(kxs):
+                a0, a1 = dst[i], (dst[i + 1] if i < len(kxs) - 1 else maxw)
+                anchor_src, anchor_dst = (src[i + 1], dst[i + 1]) if i == 0 else (src[i], dst[i])
+                ox = anchor_dst - kx * anchor_src
+                sc = band.resize((max(1, round(band.width * kx)), h), Image.LANCZOS)
+                piece = sc.crop((round(a0 - ox), 0, round(a1 - ox), h))
+                img.alpha_composite(piece, (region[0] + a0, region[1] + (maxh - h) // 2))
         return [r for r, _ in items]
     return edit
 
@@ -386,8 +389,9 @@ HUD_ROWS = ['Side Basshaa', 'Riders Defeated', 'Transcend!', 'Crimson Gauge', 'B
             'Collecting Cell Medals', 'Key Item', 'Restricted']
 HUD_EDITS = {
     # the plain and the glowing version are drawn on top of each other: they must line up (layers)
-    # 撃|破|! is three sprites (SSAD action/0135 tex_conp01-03 / tex_conp_eff01-03: x 0-56, 56-112, 112-136)
-    153: sliced(('Defe', 'ated', '!'), ((55, 57), (111, 113)),
+    # 撃|破|! is three sprites (SSAD action/0135 tex_conp01-03 / tex_conp_eff01-03: x 0-56, 56-112, 112-136), drawn
+    # side by side: the edges fall between 'Defe|ated|!'
+    153: sliced('Defeated!', (4, 8), (56, 112),
                 ((0, 0, 136, 50), KO_BIG), ((0, 50, 136, 100), KO_GOLD)),
     154: combine(layers('Clear!', ((0, 112, 118, 160), CLEAR_RED), ((0, 162, 118, 210), replace(KO_GOLD, size=38))),
                  labels(((176, 188, 206, 206), 'Now', HUD_GOLD), ((144, 210, 206, 231), 'to go!!', HUD_GOLD),

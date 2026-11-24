@@ -118,7 +118,7 @@ to `ur0:shell/db/app.db` and restart the Vita.
 - Some tiny labels (record screen, portrait name tags) are still Japanese.
 - Without the FAGDec `eboot.bin.elf`, the result screen and some messages stay Japanese.
 - Credits staff names are left in Japanese.
-- Made for a real PS Vita only. Emulators are not supported.
+- Made for and tested on a real PS Vita only. Emulators such as Vita3K have not been tested.
 
 ## Screenshots
 

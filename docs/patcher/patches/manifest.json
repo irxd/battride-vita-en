@@ -1,5 +1,5 @@
 {
- "version": "0.1.1",
+ "version": "0.1.2",
  "titleId": "PCSG00675",
  "gameVersion": "1.02",
  "files": [
@@ -2604,7 +2604,7 @@
    "target": {
     "path": "rePatch/PCSG00675/nativeVITA/_fpk/ui/action.fpk",
     "size": 2702144,
-    "sha1": "7cecd026119da2f80d7d851a11b49412ef140d2d"
+    "sha1": "bfc1db9d9f844ac1df884da31a03a535a2c95c4e"
    }
   },
   {
@@ -2701,8 +2701,8 @@
    },
    "target": {
     "path": "rePatch/PCSG00675/nativeVITA/movie/etc/CHP_000_000/movie_00.mp4",
-    "size": 6123155,
-    "sha1": "57a52ce89f4122d00d4051179e1bc051cc75ef68"
+    "size": 6108271,
+    "sha1": "38830ffd42426fe361be4ab94454c1aba70f170d"
    }
   },
   {
@@ -2715,8 +2715,8 @@
    },
    "target": {
     "path": "rePatch/PCSG00675/nativeVITA/movie/etc/CHP_000_001/movie_00.mp4",
-    "size": 11276896,
-    "sha1": "b297bd05ded6fa320a117fecee1444043c516387"
+    "size": 11246626,
+    "sha1": "820588dfd71c7533776bfb0446be3812b2a53a81"
    }
   },
   {
@@ -2729,8 +2729,8 @@
    },
    "target": {
     "path": "rePatch/PCSG00675/nativeVITA/movie/etc/CHP_001_000/movie_00.mp4",
-    "size": 26667225,
-    "sha1": "26427d646f0df514fe6c9078ad2eb3299a8c94eb"
+    "size": 26532576,
+    "sha1": "a62dbe368b661f4eb51f0933a9d22f17e566cd4c"
    }
   },
   {
@@ -2743,8 +2743,8 @@
    },
    "target": {
     "path": "rePatch/PCSG00675/nativeVITA/movie/msn/BAT_020_000/movie_00.mp4",
-    "size": 1363854,
-    "sha1": "b378576a9a40eb8f285f585c476ee66f5818272f"
+    "size": 1363487,
+    "sha1": "e2f9c96970920fe92a208c00127d6f4c464a530c"
    }
   },
   {
@@ -2758,7 +2758,7 @@
    "target": {
     "path": "rePatch/PCSG00675/nativeVITA/movie/msn/BAT_020_001/movie_00.mp4",
     "size": 1281563,
-    "sha1": "bad92465be662917bd084a05f2a87548d210a6dc"
+    "sha1": "3eba7bc3edfa68b736e18e39182d78da517f0c81"
    }
   },
   {
@@ -2771,8 +2771,8 @@
    },
    "target": {
     "path": "rePatch/PCSG00675/nativeVITA/movie/msn/BAT_020_002/movie_00.mp4",
-    "size": 1279466,
-    "sha1": "37dfb932816e6794f822bb5e97c548a324c44a9d"
+    "size": 1279154,
+    "sha1": "3fe435b2324b546d552d77b8145096244af377ad"
    }
   },
   {
@@ -2786,7 +2786,35 @@
    "target": {
     "path": "rePatch/PCSG00675/nativeVITA/movie/msn/BAT_020_003/movie_00.mp4",
     "size": 1327240,
-    "sha1": "d43331d4d0615306de8c11833f96eabec3fe528a"
+    "sha1": "bb14fc0143b94a2bafa7e51962ac642be2286bad"
+   }
+  },
+  {
+   "patch": "nativeVITA/movie/msn/BAT_028_000/movie_00.mp4.xdelta",
+   "source": {
+    "path": "nativeVITA/movie/msn/BAT_028_000/movie_00.mp4",
+    "origin": "app",
+    "size": 949337,
+    "sha1": "521e8c8a5950b419c2eaf4fdee5bc24719901333"
+   },
+   "target": {
+    "path": "rePatch/PCSG00675/nativeVITA/movie/msn/BAT_028_000/movie_00.mp4",
+    "size": 946121,
+    "sha1": "a7d9e682fda5b5741a1fb02bccd3db0a9e0fa782"
+   }
+  },
+  {
+   "patch": "nativeVITA/movie/msn/BAT_040_000/movie_00.mp4.xdelta",
+   "source": {
+    "path": "nativeVITA/movie/msn/BAT_040_000/movie_00.mp4",
+    "origin": "app",
+    "size": 926048,
+    "sha1": "093597fb87ef2a04696d3fd4d3a7bf94c012df01"
+   },
+   "target": {
+    "path": "rePatch/PCSG00675/nativeVITA/movie/msn/BAT_040_000/movie_00.mp4",
+    "size": 991939,
+    "sha1": "876c87d9f45f546109205e4a5be5a944c3e9b71e"
    }
   },
   {
@@ -2799,8 +2827,8 @@
    },
    "target": {
     "path": "rePatch/PCSG00675/nativeVITA/movie/msn/BAT_041_000/movie_00.mp4",
-    "size": 2994082,
-    "sha1": "a2c219cdb4849124eac84847014d7ed955945d7b"
+    "size": 2994055,
+    "sha1": "53ba35a68194edc05aebf95b138a291cf0059bba"
    }
   },
   {
@@ -2813,8 +2841,8 @@
    },
    "target": {
     "path": "rePatch/PCSG00675/nativeVITA/movie/msn/BAT_044_000/movie_00.mp4",
-    "size": 1139326,
-    "sha1": "e055cfdbc848ff480d3358fbe31db3eb5d936759"
+    "size": 1137295,
+    "sha1": "cef07d2389653ae89e195e4e7397a5d8da217b6e"
    }
   },
   {
@@ -2827,8 +2855,8 @@
    },
    "target": {
     "path": "rePatch/PCSG00675/nativeVITA/movie/msn/BAT_044_001/movie_00.mp4",
-    "size": 1117320,
-    "sha1": "ee671be198eeb15bfbe826ce1f1b0651bb39b2ab"
+    "size": 1116922,
+    "sha1": "02364c2947a4dfe8f23422fa4f9eedbd49ee35fd"
    }
   },
   {
@@ -2841,8 +2869,8 @@
    },
    "target": {
     "path": "rePatch/PCSG00675/nativeVITA/movie/msn/BAT_044_002/movie_00.mp4",
-    "size": 1068658,
-    "sha1": "b9ab02e502c8203124d3a7d2bc1f95d153a440ee"
+    "size": 1066848,
+    "sha1": "ffc910f6ef435a053776b28f9356d02d2cb327f5"
    }
   },
   {
@@ -2855,8 +2883,8 @@
    },
    "target": {
     "path": "rePatch/PCSG00675/nativeVITA/movie/msn/BAT_044_003/movie_00.mp4",
-    "size": 1141195,
-    "sha1": "3ad7fc61e392c852c15a302d77f03a2aa40d6862"
+    "size": 1139645,
+    "sha1": "838f9408ef56706a2098d0b30930afb0cae185e8"
    }
   },
   {
@@ -2869,8 +2897,8 @@
    },
    "target": {
     "path": "rePatch/PCSG00675/nativeVITA/movie/msn/BAT_044_005/movie_00.mp4",
-    "size": 1099237,
-    "sha1": "65c14e107fb3863f3335e93045dc857c0e3b4b29"
+    "size": 1100092,
+    "sha1": "89f1e80b253c8270a0e0fad60231715475a83078"
    }
   },
   {
@@ -2883,8 +2911,8 @@
    },
    "target": {
     "path": "rePatch/PCSG00675/nativeVITA/movie/msn/MIN_001_000/movie_00.mp4",
-    "size": 7316472,
-    "sha1": "0d6717cdc69e32b9a58fb96e38f3fa9efbeb6fe3"
+    "size": 7316699,
+    "sha1": "e70d65c002e9d4fede3d23af9ee5599aa0db6ae9"
    }
   },
   {
@@ -2897,8 +2925,8 @@
    },
    "target": {
     "path": "rePatch/PCSG00675/nativeVITA/movie/msn/MIN_003_000/movie_00.mp4",
-    "size": 8007256,
-    "sha1": "1a767b62be51722ca85fa211049247ffa0bbb408"
+    "size": 8002159,
+    "sha1": "0186e2963fd40e0206fb1204de175603c75ace35"
    }
   },
   {
@@ -2911,8 +2939,8 @@
    },
    "target": {
     "path": "rePatch/PCSG00675/nativeVITA/movie/msn/MIN_005_000/movie_00.mp4",
-    "size": 5646676,
-    "sha1": "a6fc9c8b0a94a805aaf26d90380ede2031af87fe"
+    "size": 5644239,
+    "sha1": "1025e56a3d3a82945fba9eba15977af0449ae97c"
    }
   },
   {
@@ -2925,8 +2953,22 @@
    },
    "target": {
     "path": "rePatch/PCSG00675/nativeVITA/movie/msn/MIN_007_000/movie_00.mp4",
-    "size": 5447322,
-    "sha1": "6efd659c77aa315b19590daf7c3707905fb00c11"
+    "size": 5445215,
+    "sha1": "4109368e0456373084ae4f671a7395b88328ffc6"
+   }
+  },
+  {
+   "patch": "nativeVITA/movie/msn/MIN_009_000/movie_00.mp4.xdelta",
+   "source": {
+    "path": "nativeVITA/movie/msn/MIN_009_000/movie_00.mp4",
+    "origin": "app",
+    "size": 4231158,
+    "sha1": "9214674b1cfd343bf899240ae673990dd1b20714"
+   },
+   "target": {
+    "path": "rePatch/PCSG00675/nativeVITA/movie/msn/MIN_009_000/movie_00.mp4",
+    "size": 4627927,
+    "sha1": "4896103e5d1be5f3808c01c0b076afb9c9799d7a"
    }
   },
   {
@@ -2939,8 +2981,8 @@
    },
    "target": {
     "path": "rePatch/PCSG00675/nativeVITA/movie/msn/MIN_011_000/movie_00.mp4",
-    "size": 6618083,
-    "sha1": "20a9289d1ee96fb3108b802f83123c8217c2eaf0"
+    "size": 6612216,
+    "sha1": "872f01443b1c51ad8d5089c5e83c413cc931f4c3"
    }
   },
   {
@@ -2953,8 +2995,8 @@
    },
    "target": {
     "path": "rePatch/PCSG00675/nativeVITA/movie/msn/MIN_013_000/movie_00.mp4",
-    "size": 4911272,
-    "sha1": "85f7b0b5b4bd9c20104b8929184d97d765ee2caa"
+    "size": 4911725,
+    "sha1": "2ee502c53cd587b96f0b1a411135413d20ad8a6c"
    }
   },
   {
@@ -2967,8 +3009,8 @@
    },
    "target": {
     "path": "rePatch/PCSG00675/nativeVITA/movie/msn/MIN_015_000/movie_00.mp4",
-    "size": 4491668,
-    "sha1": "f31345e62c682c0f906269667d310770ac64c72a"
+    "size": 4490494,
+    "sha1": "b478a6108d097a81bb1b77ce93cd1cdc76607449"
    }
   },
   {
@@ -2982,7 +3024,7 @@
    "target": {
     "path": "rePatch/PCSG00675/nativeVITA/movie/msn/STR_000_000/movie_00.mp4",
     "size": 675006,
-    "sha1": "e5b383eae3a86d2390fad578ad97235b95e3987c"
+    "sha1": "10df3fe8ca9488e08c448ca4b9c99461152428d0"
    }
   },
   {
@@ -2996,7 +3038,7 @@
    "target": {
     "path": "rePatch/PCSG00675/nativeVITA/movie/msn/STR_001_000/movie_00.mp4",
     "size": 5671354,
-    "sha1": "544b9a515b6ab520c4ce0c122229d3dee64f9e87"
+    "sha1": "43c499afaacd35dc59c7d702526cf5e5ddf91ac5"
    }
   },
   {
@@ -3009,8 +3051,8 @@
    },
    "target": {
     "path": "rePatch/PCSG00675/nativeVITA/movie/msn/STR_002_000/movie_00.mp4",
-    "size": 2860792,
-    "sha1": "175dbe9c369c01dd861c3de227a767103a3b4e46"
+    "size": 2859550,
+    "sha1": "06dc073109e7fbe26ad04c6602cef457fe3cc379"
    }
   },
   {
@@ -3023,8 +3065,8 @@
    },
    "target": {
     "path": "rePatch/PCSG00675/nativeVITA/movie/msn/STR_003_000/movie_00.mp4",
-    "size": 982035,
-    "sha1": "71f65f701cd7632117b1edc77274db95108853de"
+    "size": 981971,
+    "sha1": "279cd053e23b03243568909f937fbe9de00e7d80"
    }
   },
   {
@@ -3037,8 +3079,22 @@
    },
    "target": {
     "path": "rePatch/PCSG00675/nativeVITA/movie/msn/STR_003_001/movie_00.mp4",
-    "size": 988241,
-    "sha1": "9977a9b43667c80e88dd1ab4263fe0b40903f7fa"
+    "size": 990089,
+    "sha1": "cde5e768fe572f7be4ee3569f788551a7e5ae91e"
+   }
+  },
+  {
+   "patch": "nativeVITA/movie/msn/STR_003_002/movie_00.mp4.xdelta",
+   "source": {
+    "path": "nativeVITA/movie/msn/STR_003_002/movie_00.mp4",
+    "origin": "app",
+    "size": 808623,
+    "sha1": "d598053645ba0de27cbf8971f8542a11094d76b7"
+   },
+   "target": {
+    "path": "rePatch/PCSG00675/nativeVITA/movie/msn/STR_003_002/movie_00.mp4",
+    "size": 966143,
+    "sha1": "01c49828f99f5c21a41c82bea958260a2d1267f4"
    }
   },
   {
@@ -3052,7 +3108,7 @@
    "target": {
     "path": "rePatch/PCSG00675/nativeVITA/movie/msn/STR_003_003/movie_00.mp4",
     "size": 965842,
-    "sha1": "8d7872b695418e7c4f1f3726b329dcd750df4b32"
+    "sha1": "cd25b48ce16b8139c5512bf391aadf181c539137"
    }
   },
   {
@@ -3065,8 +3121,8 @@
    },
    "target": {
     "path": "rePatch/PCSG00675/nativeVITA/movie/msn/STR_003_004/movie_00.mp4",
-    "size": 963847,
-    "sha1": "d4569dc0560c8875b4d5b882460ea89fb9981cf5"
+    "size": 962926,
+    "sha1": "9b2d40f61077a8eae64e5ae918cded044e57f57e"
    }
   },
   {
@@ -3080,7 +3136,7 @@
    "target": {
     "path": "rePatch/PCSG00675/nativeVITA/movie/msn/STR_003_005/movie_00.mp4",
     "size": 978567,
-    "sha1": "0c1e4789ac3fbcae37a8f7e5dfcfb72397efcfb9"
+    "sha1": "77f50d83b36a90bec08637952683c9a3bbfa349f"
    }
   },
   {
@@ -3093,8 +3149,8 @@
    },
    "target": {
     "path": "rePatch/PCSG00675/nativeVITA/movie/msn/STR_004_000/movie_00.mp4",
-    "size": 2035511,
-    "sha1": "928b246fa01dfb96cf5dcae17b0149b700d2c277"
+    "size": 2036128,
+    "sha1": "0fc853b4d366ae317717e93bda3d7d49bc97c49c"
    }
   },
   {
@@ -3107,8 +3163,8 @@
    },
    "target": {
     "path": "rePatch/PCSG00675/nativeVITA/movie/msn/STR_004_001/movie_00.mp4",
-    "size": 17144055,
-    "sha1": "ce819a374d3a6cc950c3b0be9bbccf9662421965"
+    "size": 17148152,
+    "sha1": "29d5c874abe90cefd7e98421335146910ec917eb"
    }
   },
   {
@@ -3121,8 +3177,8 @@
    },
    "target": {
     "path": "rePatch/PCSG00675/nativeVITA/movie/msn/STR_004_002/movie_00.mp4",
-    "size": 7548254,
-    "sha1": "bc5586fe1982cd1a034aa4778faf2dfa8ecae3d0"
+    "size": 7547298,
+    "sha1": "3f51c20d3c47a1d55b96abdf6f14ddb9c7f8202f"
    }
   },
   {

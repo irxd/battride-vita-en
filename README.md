@@ -6,7 +6,7 @@ A fan English translation patch for **仮面ライダー バトライド・ウ�
 There is no official English release of this game on any platform, so everything is a new translation. Rider,
 form and finisher names follow the official English of *Kamen Rider: Climax Fighters* where possible.
 
-> **Status: v0.1.1, first full translation pass.** Text, menus, story, mission dialogue, battle lines, UI images
+> **Status: v0.1.2, first full translation pass.** Text, menus, story, mission dialogue, battle lines, UI images
 > and movie subtitles are in English. Tested on a real PS Vita; some text may still overflow its box.
 >
 > **Patch it in your browser with the [web patcher](https://irxd.github.io/battride-vita-en/)** or download the
@@ -149,7 +149,7 @@ See [CLAUDE.md](CLAUDE.md) for the local data layout and [PLAN.md](PLAN.md) for 
 python -P -X utf8 tools/build_text.py build     # text + font  -> build/rePatch/PCSG00675
 python -P tools/build_images.py                  # UI textures  -> build/rePatch/PCSG00675
 python -P tools/build_eboot.py                   # eboot text (text/eboot.json) -> build/.../eboot.bin
-python -P scripts/make_release.py 0.1.0          # both, then xdelta patches -> release/ and docs/patcher/patches/
+python -P scripts/make_release.py 0.1.2          # both, then xdelta patches -> release/ and docs/patcher/patches/
 ```
 
 `make_release.py` needs `xdelta3` and the decrypted game (`scripts/decrypt_vita.ps1`). It makes one patch per
